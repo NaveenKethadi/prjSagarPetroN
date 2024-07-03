@@ -16,4 +16,10 @@ namespace prjSagarPetroN.Models
         public decimal fQty { get; set; }
         public int bInput { get; set; }
     }
+    public class ClsPrepaymentsMstr
+    {
+        public string id { get; set; }
+        public string pid { get; set; }
+        public string name { get; set; }
+    }
 }

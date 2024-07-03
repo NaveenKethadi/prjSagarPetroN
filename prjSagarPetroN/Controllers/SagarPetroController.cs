@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace prjSagarPetroN.Controllers
 {
@@ -26,6 +28,7 @@ namespace prjSagarPetroN.Controllers
             //ViewBag.Items = GetItems(companyId);
             ViewBag.Itemgroup = GetItemsLastGroup(companyId);
             ViewBag.wh = GetWarehouse(companyId);
+            ViewBag.Parent = GetParent(companyId);
             return View();
         }
         public ActionResult GetItems(int selectedId, int companyId)//IEnumerable<SelectListItem>
@@ -119,19 +122,161 @@ namespace prjSagarPetroN.Controllers
 
             return new SelectList(Whlist.AsEnumerable(), "Value", "Text");
         }
-        public ActionResult GetFGItemsonStocklevel(List<int> selectedValues, int companyId, string dt, int GroupId)
+        //GetItemGroups
+        public ActionResult GetItemGroups(int selectedId, int companyId)
+        {
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            string Str2 = string.Empty;
+            List<ClsPrepaymentsMstr> PrePaymentMstrs2 = new List<ClsPrepaymentsMstr>();
+            string error = string.Empty;
+            Str2 = $@"select p.iMasterId,sName,ISNULL(iParentId,0) iParentId from mCore_Product p
+                     join mCore_ProductTreeDetails mp on p.iMasterId = mp.iMasterId where p.iMasterId > 0
+                     and p.iMasterId in (select iMasterId from fCore_GetProductTreeSequence({selectedId},0)) 
+                    and iParentId<>0
+                    order by sName";
+            DataSet ds2 = ClsDataAcceslayer.GetData1(Str2, Convert.ToInt32(companyId), ref error);
+            for (int i = 0; i < ds2.Tables[0].Rows.Count; i++)
+            {
+                PrePaymentMstrs2.Add(new ClsPrepaymentsMstr { id = ds2.Tables[0].Rows[i]["iMasterId"].ToString(), pid = ds2.Tables[0].Rows[i]["iParentId"].ToString(), name = ds2.Tables[0].Rows[i]["sName"].ToString() });
+            }
+
+            //return View(PrePaymentMstrs2);
+            var jsonResult = Json(new { status = true, PrePaymentMstrs2 }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+        public ActionResult CheckReturnType(string selectedIds, int companyId)
+        {
+            try
+            {
+                bool status1 = true;
+                //query to get only sub groups from the selected selectedIds
+                string q = $@"select distinct iParentId  as subgrpid
+					 from vmCore_Product 
+					 where iMasterId in ({selectedIds})
+					 and bgroup=0";
+                DataSet ds = ClsDataAcceslayer.GetData1(q, companyId, ref error);
+                string subgrpids = "";string diffrepr1 = "";
+                List<int> a = new List<int>();
+                List<SubGrpReptcheckModel> subgrprptlst = new List<SubGrpReptcheckModel>();
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        a.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["subgrpid"]));
+                    }
+                }
+                if (a.Count > 0)
+                {
+                    subgrpids = string.Join(",", a);
+                    string q1 = $@"select mp.sName,mup.ReportType from mCore_Product mp join 
+				                muCore_Product mup on mp.iMasterId=mup.iMasterId 				
+				                where mp.iMasterId in ({subgrpids})";
+                    DataSet ds1 = ClsDataAcceslayer.GetData1(q1, companyId, ref error);
+                    if (ds1 != null && ds1.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds1.Tables[0].Rows.Count; i++)
+                        {
+                            SubGrpReptcheckModel subgrprpt = new SubGrpReptcheckModel();
+                            subgrprpt.Id = Convert.ToInt32(ds1.Tables[0].Rows[i]["ReportType"]);
+                            subgrprpt.Name = ds1.Tables[0].Rows[i]["sName"].ToString();
+                            subgrprptlst.Add(subgrprpt);
+                        }
+
+                    }
+                    var groups = subgrprptlst.GroupBy(x => x.Id).ToList();
+                    if (groups.Count == 1)
+                    {
+                        Log($"All Sub group's report types are the same-{groups.FirstOrDefault().Key}");
+                        var rt = groups.FirstOrDefault().Key;var rt1 = 0; string msg = "";
+                        IEnumerable<SelectListItem> inchargelst = new List<SelectListItem>();
+                        if (rt == 2 || rt == 3)
+                        {
+                            if (rt == 2) rt1 = 412;
+                            if (rt == 3) rt1 = 5;
+                            inchargelst = GetIncharge(companyId, rt1);// IEnumerable<SelectListItem>
+                                                                      //                    
+                        }
+                        else if (rt == 1)
+                        {
+                            status1 = false;
+                            // string msg = $"Item:{groups.ElementAt(0).FirstOrDefault().Name}'s report type is not defined";
+                            msg = $"Report type of Item -'{groups.ElementAt(0).FirstOrDefault().Name}' is not defined";
+                            // return Json(new { status = false, Message = msg });
+                        }
+                       // else
+                          //  rt1 = rt;
+                        return Json(new { status = status1, rt, inchargelst , Message = msg });
+                    }
+                    else
+                    {
+                        StringBuilder diffrepr = new StringBuilder();
+                        Log("Items with different report types:");
+                        foreach (var group in groups)
+                        {
+                            foreach (var item in group)
+                            {
+                                string reptp = "";
+                                if (item.Id == 1) reptp = "Report Type not defined";
+                                if (item.Id == 2) reptp = "FG";if (item.Id == 3) reptp = "SFG";if (item.Id == 4) reptp = "Base Oil";
+                                if (item.Id == 5) reptp = "Additives"; if (item.Id == 6) reptp = "Packing Material";
+                                diffrepr.Append($"{item.Name}:{reptp},");
+                                Log($"Name: {item.Name}, ReportType: {item.Id}");
+                            }
+                        }
+                        if (diffrepr.Length > 0)
+                        {
+                            diffrepr.Length--; // Remove the last character, which is the comma
+                            diffrepr1 = "Items with different report types found\n";
+                            diffrepr1 += $"{diffrepr}";
+                        }
+                        return Json(new { status = false, Message = diffrepr1 });
+                    }
+                }
+                return Json(0);
+            }
+            catch (Exception a)
+            {
+                return Json(new { status = false, Message = a.Message });
+            }
+        }
+        public IEnumerable<SelectListItem> GetParent(int companyId)
+        {
+            List<SelectListItem> Whlist = new List<SelectListItem>();
+            Whlist.Add(new SelectListItem { Value = "0", Text = "--select--" });
+            string splistQry = $@"select distinct p.sName,p.iMasterId from  dbo.fCore_GetProductByLevel(0) l
+                join mCore_Product p  on l.iParentId = p.iMasterId and iStatus<>5
+                where bGroup = 1
+                order by p.iMasterId";
+            DataSet ds = ClsDataAcceslayer.GetData1(splistQry, companyId, ref error);
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                Whlist.Add(new SelectListItem()
+                {
+                    Value = ds.Tables[0].Rows[i]["iMasterId"].ToString(),
+                    Text = ds.Tables[0].Rows[i]["sName"].ToString()
+                });
+            }
+
+            return new SelectList(Whlist.AsEnumerable(), "Value", "Text");
+        }
+        // public ActionResult GetFGItemsonStocklevel(List<int> selectedValues, int companyId, string dt, int GroupId)
+        public ActionResult GetFGItemsonStocklevel(string selected, int companyId, string dt)//, int GroupId
         {
             try
             {
                 Log("GetFGItemsonStocklevel Method");
-                Log("Selected Group:" + GroupId + ",companyId:" + companyId);
-                string commaseperateditems = "";
+               // Log("Selected Group:" + GroupId + ",companyId:" + companyId);
+                //string commaseperateditems = "";
                 List<ItemShowModel> itemshowmodellist1 = new List<ItemShowModel>();
-                foreach (var item in selectedValues)
-                {
-                    commaseperateditems = commaseperateditems + item.ToString() + ",";
-                }
-                Log("Selected Items :" + commaseperateditems.Trim(','));
+                //foreach (var item in selectedValues)
+                //{
+                //    commaseperateditems = commaseperateditems + item.ToString() + ",";
+                //}
+                Log("Selected Items :" + selected);
+                List<int> selectedValues = selected.Split(',')
+                                  .Select(int.Parse)
+                                  .ToList();
                 foreach (var item in selectedValues)
                 {
                     int avgsalecnsumdays = 0;
@@ -200,22 +345,22 @@ namespace prjSagarPetroN.Controllers
                                 //                       where  iVoucherType=5633 and pob.fQuantity={-(Astockval - safetystockval)} order by 1 desc) l on k.Itemid=l.iItem
                                 //                       where Itemid={item}";
                                 string qitemdetails = $@"select Item,Itemid,sCode,UnitId,DefaultBaseUnit,Description,
-isnull(sVoucherNo,'') sVoucherNo,isnull(ProductionOrderNo_,'') ProductionOrderNo_,isnull(duedate,'') duedate from
-(select mp.sName Item,mp.iMasterId Itemid,mp.sCode,mu.sName DefaultBaseUnit,
-mu.iMasterId UnitId,sDescription Description 
-from mCore_Product mp
-join muCore_Product_Units mpu on mpu.iMasterId=mp.iMasterId
-join mCore_Units mu on mu.iMasterId=iDefaultBaseUnit
-join muCore_Product mup on mup.iMasterId=mp.iMasterId
-) k
-	left  join
-(select top 1 sVoucherNo,iProduct,ProductionOrderNo_,convert(varchar,dbo.IntToDate(DueDate),103) duedate from tCore_Header_0 h join tCore_Data_0 d on h.iHeaderId=d.iHeaderId
-join tCore_Indta_0 ind on ind.iBodyId=d.iBodyId 
-join tCore_Data5633_0 dv on dv.iBodyId=d.iBodyId
---join tMrp_ProdOrderBody_0 pob on pob.iItem=ind.iProduct
---join tMrp_ProdOrder_0  po on po.iProdOrderId=pob.iProdOrderId
-where  iVoucherType=5633 order by LEN(sVoucherNo) desc,sVoucherNo desc) l on k.Itemid=l.iProduct
-where Itemid={item}";
+                                isnull(sVoucherNo,'') sVoucherNo,isnull(ProductionOrderNo_,'') ProductionOrderNo_,isnull(duedate,'') duedate from
+                                (select mp.sName Item,mp.iMasterId Itemid,mp.sCode,mu.sName DefaultBaseUnit,
+                                mu.iMasterId UnitId,sDescription Description 
+                                from mCore_Product mp
+                                join muCore_Product_Units mpu on mpu.iMasterId=mp.iMasterId
+                                join mCore_Units mu on mu.iMasterId=iDefaultBaseUnit
+                                join muCore_Product mup on mup.iMasterId=mp.iMasterId
+                                ) k
+	                                left  join
+                                (select top 1 sVoucherNo,iProduct,ProductionOrderNo_,convert(varchar,dbo.IntToDate(DueDate),103) duedate from tCore_Header_0 h join tCore_Data_0 d on h.iHeaderId=d.iHeaderId
+                                join tCore_Indta_0 ind on ind.iBodyId=d.iBodyId 
+                                join tCore_Data5633_0 dv on dv.iBodyId=d.iBodyId
+                                --join tMrp_ProdOrderBody_0 pob on pob.iItem=ind.iProduct
+                                --join tMrp_ProdOrder_0  po on po.iProdOrderId=pob.iProdOrderId
+                                where  iVoucherType=5633 order by LEN(sVoucherNo) desc,sVoucherNo desc) l on k.Itemid=l.iProduct
+                                where Itemid={item}";
                                 Log("" + qitemdetails);
                                 DataSet dsitemdetails = ClsDataAcceslayer.GetData1(qitemdetails, companyId, ref error);
                                 Log("query result count:" + dsitemdetails.Tables[0].Rows.Count);
@@ -255,19 +400,23 @@ where Itemid={item}";
             }
         }
         //GetSFGItemsonStocklevel
-        public ActionResult GetSFGItemsonStocklevel(List<int> selectedValues, int companyId, string dt, int GroupId)
+        //  public ActionResult GetSFGItemsonStocklevel(List<int> selectedValues, int companyId, string dt, int GroupId)
+        public ActionResult GetSFGItemsonStocklevel(string selected, int companyId, string dt)
         {
             try
             {
                 Log("GetSFGItemsonStocklevel Method");
-                Log("Selected Group:" + GroupId + ",companyId:" + companyId);
-                string commaseperateditems = "";
+             //   Log("Selected Group:" + GroupId + ",companyId:" + companyId);
+                //string commaseperateditems = "";
                 List<ItemShowModel> itemshowmodellist1 = new List<ItemShowModel>();
-                foreach (var item in selectedValues)
-                {
-                    commaseperateditems = commaseperateditems + item.ToString() + ",";
-                }
-                Log("Selected Items :" + commaseperateditems.Trim(','));
+                //foreach (var item in selectedValues)
+                //{
+                //    commaseperateditems = commaseperateditems + item.ToString() + ",";
+                //}
+                //Log("Selected Items :" + commaseperateditems.Trim(','));
+                List<int> selectedValues = selected.Split(',')
+                                   .Select(int.Parse)
+                                   .ToList();
                 foreach (var item in selectedValues)
                 {
                     Log("Item Id:" + item);
@@ -344,7 +493,7 @@ isnull(Description,'') Description,isnull(TankMaster,'') TankMaster,isnull(Capac
 isnull(TopUpTankCapacity,0) TopUpTankCapacity,isnull(sVoucherNo,'') sVoucherNo,
 isnull(ProductionOrderNo_,'') sProdOrderNo,isnull(duedate,'') duedate from
 (select mp.sName Item,mp.sCode,mp.iMasterId,mu.sName DefaultBaseUnit,mu.iMasterId UnitId,sDescription Description,
-iProductType,ProductType from mCore_Product mp
+iProductType from mCore_Product mp--ProductType
 join muCore_Product_Units mpu on mpu.iMasterId=mp.iMasterId
 join mCore_Units mu on mu.iMasterId=iDefaultBaseUnit
 join muCore_Product mup on mup.iMasterId=mp.iMasterId) a 
@@ -418,19 +567,18 @@ where a.iMasterId={item}";//isnull(mw.Capacity,0)
                 return Json(new { status = false, Message = x.Message });
             }
         }
-        public ActionResult GetRMBaseOils(List<int> selectedValues, int companyId, string dt, int GroupId)
+        public ActionResult GetRMBaseOils(string selected, int companyId, string dt)//, int GroupId
         {
             try
             {
                 Log("GetRMBaseOils Method");
-                Log("Selected Group:" + GroupId + ",companyId:" + companyId);
-                string commaseperateditems = "";
+               // Log("Selected Group:" + GroupId + ",companyId:" + companyId);
+               // string commaseperateditems = "";
                 List<ItemShowModel> itemshowmodellist1 = new List<ItemShowModel>();
-                foreach (var item in selectedValues)
-                {
-                    commaseperateditems = commaseperateditems + item.ToString() + ",";
-                }
-                Log("Selected Items :" + commaseperateditems.Trim(','));
+                List<int> selectedValues = selected.Split(',')
+                                  .Select(int.Parse)
+                                  .ToList();
+                Log("Selected Items :" + selected);
                 foreach (var item in selectedValues)
                 {
                     Log("Item Id:" + item);
@@ -509,7 +657,7 @@ isnull(TopUpTankCapacity,0) TopUpTankCapacity,isnull(sVoucherNo,'') sVoucherNo,i
 --isnull(sProdOrderNo,'') sProdOrderNo,isnull(duedate,'') duedate 
 from
 (select mp.sName Item,mp.sCode Code,mp.iMasterId Itemid,mu.sName DefaultBaseUnit,mu.iMasterId UnitId,sDescription Description,
-iProductType,ProductType from mCore_Product mp
+iProductType from mCore_Product mp--ProductType
 join muCore_Product_Units mpu on mpu.iMasterId=mp.iMasterId
 join mCore_Units mu on mu.iMasterId=iDefaultBaseUnit
 join muCore_Product mup on mup.iMasterId=mp.iMasterId) a 
@@ -579,19 +727,18 @@ where a.Itemid={item}";
             }
         }
         //GetRMBaseAdditives
-        public ActionResult GetRMBaseAdditives(List<int> selectedValues, int companyId, string dt, int GroupId)//, string strwh, int selectedwh
+        public ActionResult GetRMBaseAdditives(string selected, int companyId, string dt)//, string strwh, int selectedwh , int GroupId
         {
             try
             {
                 Log("GetRMBaseAdditives Method");
-                Log("Selected Group:" + GroupId + ",companyId:" + companyId);
-                string commaseperateditems = "";
+              //  Log("Selected Group:" + GroupId + ",companyId:" + companyId);
+               // string commaseperateditems = "";
                 List<ItemShowModel> itemshowmodellist1 = new List<ItemShowModel>();
-                foreach (var item in selectedValues)
-                {
-                    commaseperateditems = commaseperateditems + item.ToString() + ",";
-                }
-                Log("Selected Items :" + commaseperateditems.Trim(','));
+                List<int> selectedValues = selected.Split(',')
+                                  .Select(int.Parse)
+                                  .ToList();
+                Log("Selected Items :" + selected);
                 foreach (var item in selectedValues)
                 {
                     Log("Item Id:" + item);
@@ -723,19 +870,18 @@ where Itemid={item}";
             }
         }
         //GetPm
-        public ActionResult GetPm(List<int> selectedValues, int companyId, string dt, int GroupId)//, string strwh, int selectedwh
+        public ActionResult GetPm(string selected, int companyId, string dt)//, string strwh, int selectedwh
         {
             try
             {
                 Log("GetPm Method");
-                Log("Selected Group:" + GroupId + ",companyId:" + companyId);
-                string commaseperateditems = "";
+             //   Log("Selected Group:" + GroupId + ",companyId:" + companyId);
+               // string commaseperateditems = "";
                 List<ItemShowModel> itemshowmodellist1 = new List<ItemShowModel>();
-                foreach (var item in selectedValues)
-                {
-                    commaseperateditems = commaseperateditems + item.ToString() + ",";
-                }
-                Log("Selected Items :" + commaseperateditems.TrimEnd(','));
+                List<int> selectedValues = selected.Split(',')
+                                  .Select(int.Parse)
+                                  .ToList();
+                Log("Selected Items :" + selected);
                 foreach (var item in selectedValues)
                 {
                     Log("Item Id:" + item);
@@ -1011,31 +1157,32 @@ where Itemid={item}";
                         var bomipotherlst = bommodellist.Where(_ => (_.bInput == 1 && _.iProductType != 3)).ToList();
                         //check for SFG
                         Log($"BOM name :{bomoplst.FirstOrDefault().BomName}({bomoplst.FirstOrDefault().iBOM},Version-{bomoplst.FirstOrDefault().iVersion}) ,FG item name:{bomoplst.FirstOrDefault().Item}({bomoplst.FirstOrDefault().ItemId}) ,quantity :{bomoplst.FirstOrDefault().fQty}");
-                        if (bomipsfglst.Count() > 0) { 
-                        foreach (var ipitem in bomipsfglst)
+                        if (bomipsfglst.Count() > 0)
                         {
-                            //if (ipitem.iProductType == 3)
-                            //{
-                            Log($"BOM name :{ipitem.BomName}({ipitem.iBOM},Version-{ipitem.iVersion}) ,SFG item name:{ipitem.Item}({ipitem.ItemId}) ,quantity :{ipitem.fQty}");
-                            var SFGitemquantity = ipitem.fQty;
-                            var singleitemqty = SFGitemquantity / FGitemquantity;
-                            var reqqty = item.QtytobeProduced * singleitemqty;
-                            Log($"Required quantity for SFG item {ipitem.Item} :{ reqqty}");
-                            string qcrntstk = $@"select case when sum(fQiss+fQrec)  is null then 0
+                            foreach (var ipitem in bomipsfglst)
+                            {
+                                //if (ipitem.iProductType == 3)
+                                //{
+                                Log($"BOM name :{ipitem.BomName}({ipitem.iBOM},Version-{ipitem.iVersion}) ,SFG item name:{ipitem.Item}({ipitem.ItemId}) ,quantity :{ipitem.fQty}");
+                                var SFGitemquantity = ipitem.fQty;
+                                var singleitemqty = SFGitemquantity / FGitemquantity;
+                                var reqqty = item.QtytobeProduced * singleitemqty;
+                                Log($"Required quantity for SFG item {ipitem.Item} :{ reqqty}");
+                                string qcrntstk = $@"select case when sum(fQiss+fQrec)  is null then 0
 									when sum(fQiss+fQrec)<0 then 0 else sum(fQiss+fQrec) end Closingstock from vCore_ibals_0 where iProduct=
                                     {ipitem.ItemId}";
-                            DataSet dscrntstk = ClsDataAcceslayer.GetData1(qcrntstk, cid, ref error);
-                            Log($"Available stock for SFG item {ipitem.Item}: {Convert.ToDecimal(dscrntstk.Tables[0].Rows[0]["Closingstock"])}");
-                            if (Convert.ToDecimal(dscrntstk.Tables[0].Rows[0]["Closingstock"]) == 0 || Convert.ToDecimal(dscrntstk.Tables[0].Rows[0]["Closingstock"]) < reqqty)
-                            {
-                                dd++;
-                                kk++;
-                                Message += $"SFG item '{ipitem.Item}' has low stock balance.\n";
-                                Log($"SFG item '{ipitem.Item}' has low stock balance");
+                                DataSet dscrntstk = ClsDataAcceslayer.GetData1(qcrntstk, cid, ref error);
+                                Log($"Available stock for SFG item {ipitem.Item}: {Convert.ToDecimal(dscrntstk.Tables[0].Rows[0]["Closingstock"])}");
+                                if (Convert.ToDecimal(dscrntstk.Tables[0].Rows[0]["Closingstock"]) == 0 || Convert.ToDecimal(dscrntstk.Tables[0].Rows[0]["Closingstock"]) < reqqty)
+                                {
+                                    dd++;
+                                    kk++;
+                                    Message += $"SFG item '{ipitem.Item}' has low stock balance.\n";
+                                    Log($"SFG item '{ipitem.Item}' has low stock balance");
+                                }
+                                //}
                             }
-                            //}
                         }
-                    }
                         //else
                         //{
                         //    row1 = new Hashtable
@@ -1880,11 +2027,11 @@ where Itemid={item}";
         {
             try
             {
-                
+
                 Log("Get Production Planning Entered");
                 string Message = "";
                 int bodyid = 0;
-                int item; int n=0; int unit; int bom; int duedate; decimal qty; int version;string itemname = "";string ii = "";Boolean status = true;
+                int item; int n = 0; int unit; int bom; int duedate; decimal qty; int version; string itemname = ""; string ii = ""; Boolean status = true;
                 string qgetppl = $@"SELECT sVoucherNo,ind.iProduct,mp.sName Item,mu.iMasterId UnitId,QuantitytobeProduced,
 	                                 DueDate,iBOM,isnull(iVersion,0) iVersion,d.iBodyId FROM --convert(varchar,dbo.IntToDate(DueDate),103)
 	                                tCore_Header_0 h JOIN tCore_Data_0 d on h.iHeaderId=d.iHeaderId
@@ -1910,13 +2057,13 @@ where Itemid={item}";
                         duedate = Convert.ToInt32(dsgetppl.Tables[0].Rows[i]["DueDate"]);
                         bom = Convert.ToInt32(dsgetppl.Tables[0].Rows[i]["iBOM"]);
                         version = Convert.ToInt32(dsgetppl.Tables[0].Rows[i]["iVersion"]);//==null?0: dsgetppl.Tables[0].Rows[i]["iVersion"]
-                        bodyid= Convert.ToInt32(dsgetppl.Tables[0].Rows[i]["iBodyId"]);
+                        bodyid = Convert.ToInt32(dsgetppl.Tables[0].Rows[i]["iBodyId"]);
                         Log($"Item :{item},Unit :{unit},Quantity :{qty},DueDate :{duedate},Bom:{bom},Version :{version}");
                         if (bom == 0)
                         {
                             n++;
-                           // ii = ii+ itemname + ",";
-                            Message+= $"{itemname} is not mapped with BOM,Production Order is not raised for it.\n";//Item(s) 
+                            // ii = ii+ itemname + ",";
+                            Message += $"{itemname} is not mapped with BOM,Production Order is not raised for it.\n";//Item(s) 
 
                             Log($"{itemname} is not mapped with BOM,Production Order is not raised for it");
                             // return Json(new { status = false, Message = "Item is not mapped with BOM" });
@@ -1966,13 +2113,13 @@ where sVoucherNo='{DocNo}' and iVoucherType={vtype} and iProduct={item} and Quan
                                 Log("Update ProductionOrderNo query :" + qupdate);
                                 int n3 = obj.GetExecute(qupdate, CompanyId, ref error);
                                 Log("No.of rows effected:" + n3);
-                                Message+= $"Production order raised successfully for item {itemname}.\n";
+                                Message += $"Production order raised successfully for item {itemname}.\n";
                             }
                             else
                             {
                                 status = false;
                                 Log("Error :" + error);
-                                Message+= "Issue :"+error+".\n";
+                                Message += "Issue :" + error + ".\n";
                             }
                         }
                     }

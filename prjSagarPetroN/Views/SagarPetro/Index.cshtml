@@ -9,68 +9,171 @@
         width: 400px;
         text-align: center;
     }
+
+    #progress img {
+        width: 150px;
+        margin: 200px 0 0 500px;
+    }
 </style>
-<div class="container" style="border:2px solid gray;padding:4px;border-radius:5px;width: 624px;height:307px">
-    <div class="tab-content" style="margin-left:-198px">
-        <h4 style="border-bottom:solid 3px #808080;color:#0073AA;margin-left:197px;margin-right:-3px;text-align:center">Reorder Level</h4>
+<style>
+    #tree ul {
+        width: 500px;
+    }
 
-        <div class="tableFixHead" style="width:697px;margin-left:199px;height:350px">
-            <div class="row" style="padding-top:6px">
-                <div class="col-md-6">
-                    @Html.Label("Date", new { @class = "col-md-4 control-label", @style = "padding-top:9px;margin-left:135px;" })
-                    <div class="col-md-3">
-                        @Html.Editor("Date", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })
-                    </div>
-                </div>
-                @*<div class="col-md-6">
-                    </div>*@
-            </div>
-            <div class="row" style="padding-top:6px">
-                <div class="col-md-6">
-                    @Html.Label("Item Group", new { @class = "col-md-4 control-label", @style = "padding-top:9px;margin-left:135px;" })
-                    <div class="col-md-3">
-                        @*@Html.Editor("Item Group", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })*@
-                        @Html.DropDownList("Item Group", (IEnumerable<SelectListItem>)ViewBag.Itemgroup, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "ItemGroup" })
-                    </div>
-                </div>
-                @*<div class="col-md-6">
-                    </div>*@
-            </div>
-            <div class="row" style="padding-top:6px" id="inchargediv">
-                <div class="col-md-6">
-                    @Html.Label("Production Incharge", new { @class = "col-md-4 control-label", @style = "padding-top:2px;margin-left:135px;" })
-                    <div class="col-md-3">
-                        @*@Html.Editor("Item Group", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })*@
-                        @Html.DropDownList("Production Incharge", new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "InchargeGroup" })
-                    </div>
-                </div>
-                @*<div class="col-md-6">
-                    </div>*@
-            </div>
-            <div class="row" style="padding-top:6px">
-                <div class="col-md-6">
-                    @Html.Label("Item", new { @class = "col-md-4 control-label", @style = "padding-top:9px;margin-left:135px;" })
-                    <div class="col-md-3">
-                        @*@Html.Editor("Item", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })*@
-                        @Html.DropDownList("Item", new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control", multiple = "multiple", id = "MltItem", @style = "margin-left: -2px;" })
+    #tree1 ul {
+        width: 500px;
+    }
+
+    #tree2 ul {
+        width: 500px;
+    }
 
 
-                    </div>
-                </div>
-                @*<div class="col-md-6">
-                    </div>*@
-            </div>
+    .select2-results {
+        width: 200px;
+    }
 
+    .select2-selection {
+        width: 200px;
+    }
+
+    .select2-search {
+        width: 200px;
+    }
+
+    .select2-dropdown {
+        width: 200px !important;
+    }
+
+    .select2 select2-container {
+        width: 200px !important;
+    }
+
+    span.select2-dropdown {
+        width: 200px !important;
+    }
+</style>
+<h4 style="color:#0073AA;font-weight:bold;margin-left:18px;">Reorder Level</h4>
+<div class="container">
+    <div class="col-md-5" style="border:2px solid gray;border-radius:5px;padding-bottom:10px">
+        <div class="row">
             <br />
+            <div class="row" style="margin-left:5px">
+                @Html.Label("Date", new { @class = "col-md-5 control-label", @style = "padding-top:9px;" })
+                <div class="col-md-3">
+                    @Html.Editor("Date", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })
+                </div>
+            </div>
             <br />
-            <div class="row" style="margin-left:410px;padding-top:0px;padding-bottom:2px">
+            <div class="row" style="margin-left:5px">
+                @Html.Label("Parent Group", new { @class = "col-md-5 control-label", @style = "padding-top:9px;" })
+                <div class="col-md-3">
+                    @*@Html.Editor("Item Group", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })*@
+                    @Html.DropDownList("Parent Group", (IEnumerable<SelectListItem>)ViewBag.Parent, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "ddlItmGroup" })
+                    <input type="hidden" id="txtLeavetree" name="txtLeavetree" />
+                    <input type="hidden" id="txtLeavetreename" name="txtLeavetree" />
+                    <input type="hidden" id="txtReptype" name="txtReptype" />
+                </div>
+            </div>
+            <br />
+            <div class="row" style="margin-left:5px" id="inchargediv">
+
+                @Html.Label("Production Incharge", new { @class = "col-md-5 control-label", @style = "padding-top:2px;" })
+                <div class="col-md-3">
+                    @*@Html.Editor("Item Group", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })*@
+                    @Html.DropDownList("Production Incharge", new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "InchargeGroup" })
+                </div>
+
+            </div>
+            <br />
+            <div class="row" align="center">
                 <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btnLoad" value="Load" />
                 <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btnClose" value="Close" onclick="Focus8WAPI.gotoHomePage();" />
             </div>
         </div>
+    </div>
+    <div class="col-md-1">
+        <div class="row"></div>
+    </div>
+    @*  sub groups div *@
+    <div class="col-md-5" style="border:2px solid gray;border-radius:5px;padding:5px" id="dropdown3">
 
+        <div class="row" style="margin-top: -5px;margin-right: -20px;">
+            <div class="col-md-12" align="right">
+                <input type="button" value="X" class="btn btn-danger" id="btndropdown" style="height:25px;width:20px;padding:1px">
+            </div>
+        </div>
+        <div class="row" style="text-align: left; margin-left:127px;margin-top:-123px;">
+            <div id="tree2" name="tree2" style="width:443px;float:left;border:1px solid #CCC;height:290px;overflow-x: auto;overflow-y: scroll; overflow-x:scroll;margin-bottom:5px;margin-left:-122px; margin-top:125px;height:208px;"></div>
+        </div>
+        <div class="row" style="margin-left: 354px;">
+            <button id="ProductokButton" class="btn btn-primary" style="width: 93px">OK</button>
+        </div>
     </div>
 </div>
+
+@*<div class="container" style="border:2px solid gray;padding:4px;border-radius:5px;width: 624px;height:307px">
+        <div class="tab-content" style="margin-left:-198px">
+            <h4 style="border-bottom:solid 3px #808080;color:#0073AA;margin-left:197px;margin-right:-3px;text-align:center">Reorder Level</h4>
+
+            <div class="tableFixHead" style="width:697px;margin-left:199px;height:350px">
+                <div class="row" style="padding-top:6px">
+                    <div class="col-md-6">
+                        @Html.Label("Date", new { @class = "col-md-4 control-label", @style = "padding-top:9px;margin-left:135px;" })
+                        <div class="col-md-3">
+                            @Html.Editor("Date", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" style="padding-top:6px">
+                    <div class="col-md-6">
+                        @Html.Label("Parent Group", new { @class = "col-md-4 control-label", @style = "padding-top:9px;margin-left:135px;" })
+                        <div class="col-md-3">
+
+                            @Html.DropDownList("Parent Group", (IEnumerable<SelectListItem>)ViewBag.Parent, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "ddlItmGroup" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" style="padding-top:6px">
+                    <div class="col-md-6">
+                        @Html.Label("Item Group", new { @class = "col-md-4 control-label", @style = "padding-top:9px;margin-left:135px;" })
+                        <div class="col-md-3">
+
+                            @Html.DropDownList("Item Group", (IEnumerable<SelectListItem>)ViewBag.Itemgroup, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "ItemGroup" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" style="padding-top:6px" id="inchargediv">
+                    <div class="col-md-6">
+                        @Html.Label("Production Incharge", new { @class = "col-md-4 control-label", @style = "padding-top:2px;margin-left:135px;" })
+                        <div class="col-md-3">
+
+                            @Html.DropDownList("Production Incharge", new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "InchargeGroup" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:6px">
+                    <div class="col-md-6">
+                        @Html.Label("Item", new { @class = "col-md-4 control-label", @style = "padding-top:9px;margin-left:135px;" })
+                        <div class="col-md-3">
+
+                            @Html.DropDownList("Item", new SelectList(Enumerable.Empty<SelectListItem>()), new { @class = "form-control", multiple = "multiple", id = "MltItem", @style = "margin-left: -2px;" })
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row" style="margin-left:410px;padding-top:0px;padding-bottom:2px">
+                    <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btnLoad" value="Load" />
+                    <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btnClose" value="Close" onclick="Focus8WAPI.gotoHomePage();" />
+                </div>
+            </div>
+
+        </div>
+    </div>*@
 
 <div class="text-center" style="text-align: left;" id="maindiv">
     <br />
@@ -96,27 +199,47 @@
                         <th>Post Production<br /> Planning</th>
                         <th>Production Planning<br />DocNo</th>
                         <th>Due Date</th>
-
-
                     </tr>*@
             </thead>
             <tbody id="output"></tbody>
         </table>
     </div>
 </div>
+
+@*<div id="dropdown3">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <input type="text" placeholder="Product Search" class="form-control" id="Productsearch" style="width:320px;margin-left: 120px">
+            </div>
+        </div>
+        <div class="row" style="text-align: left; margin-left:127px;margin-top:-113px;">
+            <div id="tree2" name="tree2" style="width:470px;float:left;border:1px solid #CCC;height:290px;overflow-x: auto;overflow-y: scroll; overflow-x:scroll;margin-bottom:25px;margin-left:-122px; margin-top:125px"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button id="ProductokButton" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>*@
+
 <div id="progress" class="modal">
-    <div class="center">
-        <img src="~/Content/loader4.gif" style="padding-left: 418px;" />
+    <div class="loader">
+        <img src="~/Content/loader4.gif" style="height: 50%;top: 50%;" />
     </div>
 </div>
 @section scripts{
     <script src="~/Scripts/FClient.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+    <script src="~/dist/simTree.js"></script>
+    <link href="~/dist/simTree.css" rel="stylesheet" />
     <script type="text/javascript">
         var baseUrl = '/prjSagarPetroN';
         var companyId=@ViewBag.cid;
         var SessionId;
+        var ProdSelectedIds='';
+        var ProdSelected='';
         getSetPropertyForMastersField();
         var multiselectConfig = {
             includeSelectAllOption: true,
@@ -137,7 +260,143 @@
             $('#MltItem').multiselect(multiselectConfig);
             $('#maindiv').hide();
             $('#inchargediv').hide();
+            $('#dropdown3').hide();
             // $('#whdiv').hide();
+        });//ddlItmGroup  btndropdown
+        $("#btndropdown").click(function (){
+            debugger;
+            $('#dropdown3').hide();
+            $("#ddlItmGroup").val(0);
+        });
+        $("#ddlItmGroup").change(function () {
+            debugger;
+            $("#progress").show();
+            ProdSelectedIds='';
+            ProdSelected='';
+            $('#txtLeavetree').val('');
+            $('#txtLeavetreename').val('');
+            $('#txtReptype').val('');
+            var prntval=$(this).val();
+            if(prntval==0)
+            {
+                $('#dropdown3').hide();
+                $("#progress").hide();
+                location.reload(true);
+            }
+            if(prntval!=0)
+            {
+                var data = { selectedId: prntval,companyId };
+                $.ajax({
+                    url: baseUrl + "/SagarPetro/GetItemGroups",
+                    type: "POST",
+                    datatype: 'JSON',
+                    contenttype: 'application/json; charset=utf-8',
+                    data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
+                    async: true,
+                    success: function (item) {
+                        debugger;
+                        debugger;
+                        $('#tree2').empty();
+                        //-------------------------------------Product tree functionality start------------------------------------------------//
+                        var tree = simTree({
+                            el: '#tree2',
+                            data: item.PrePaymentMstrs2,
+                            check: true,
+                            linkParent: true,
+                        });
+                        $('#dropdown3').show();
+                        $("#progress").hide();
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                        $("#progress").hide();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //alert(errorThrown);
+                        $("#progress").hide();
+                    }
+                });
+            }
+        });
+        $('#ProductokButton').on('click', function () {
+            debugger;
+            $("#progress").show();
+            var parentid=$("#ddlItmGroup").val();
+            ProdSelectedIds='';
+            ProdSelected='';
+            $('#tree2 .sim-tree a i').each(function(index1,elem) {
+                var className = elem.className;
+                if (className=="sim-tree-checkbox checked") {
+                    debugger;
+                    var dataId = $(elem).closest('li').data('id');
+                    var nm= $(elem).closest('li a').text();
+                    ProdSelectedIds = ProdSelectedIds +dataId + ",";
+                    ProdSelected = ProdSelected +nm + ",";
+                }
+            });
+            // Remove the trailing comma, if any
+            ProdSelectedIds = ProdSelectedIds.replace(/,$/, '');
+            ProdSelected = ProdSelected.replace(/,$/, '');
+            // Use ProdSelectedIds as needed
+            console.log(ProdSelectedIds);
+            console.log(ProdSelected);
+            if(ProdSelectedIds=='')
+            {
+                alert('Please select atleast one item');
+                // $("#ddlItmGroup").val(0);
+                $("#progress").hide();
+                return;
+            }
+            $('#txtLeavetree').val(ProdSelectedIds);
+            $('#txtLeavetreename').val(ProdSelected);
+            $('#dropdown3').hide();
+            // ajax method to check all sub groups have same report type or not
+            var data = { selectedIds: ProdSelectedIds,companyId };
+            $.ajax({
+                url: baseUrl + "/SagarPetro/CheckReturnType",
+                type: "POST",
+                datatype: 'JSON',
+                contenttype: 'application/json; charset=utf-8',
+                data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
+                async: true,
+                success: function (response) {
+                    if(response.status==true)
+                    {
+                        $("#progress").hide();
+                        $('#txtReptype').val(response.rt);
+                        if(response.inchargelst.length>0)
+                        {
+                            $('#inchargediv').show();
+                            var inchargedd=$('#InchargeGroup');
+                            inchargedd.empty();
+                            $.each(response.inchargelst, function (index, item) {
+                                inchargedd.append($('<option>', {
+                                    value: item.Value,
+                                    text: item.Text
+                                }));
+                            });
+                        }
+                        else{
+                            $('#inchargediv').hide();
+                        }
+                    }
+                    if(response.status==false)
+                    {
+                        alert(response.Message);
+                        $("#progress").hide();
+                        location.reload(true);
+                    }
+                },
+                failure: function (response) {
+                    alert(response.Message);
+                    $("#progress").hide();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //alert(errorThrown);
+                    $("#progress").hide();
+                }
+            });
+            // $('#dropdown3').hide();
         });
         $("#ItemGroup").change(function () {
             debugger;
@@ -192,7 +451,6 @@
                             alert(response.Message);
                             // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                         }
-
                     },
                     error: function (error) {
                         //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
@@ -205,17 +463,20 @@
             debugger;
             $("#progress").show();
             $('#maindiv').hide();
-            var selectedValue = $('#ItemGroup option:selected').val();
-            if(selectedValue==0)
+            // var selectedValue = $('#ItemGroup option:selected').val();  ddlItmGroup
+            var selectedValue1 = $('#ddlItmGroup option:selected').val();
+            if(selectedValue1==0)
             {
                 alert('Please select Item Group');
                 $("#progress").hide();
             }
             else{
-                var selected = $('#MltItem option:selected');
-                if(selected.length===0)
+                // var selected = $('#MltItem option:selected');
+                var selected = $('#txtLeavetree').val();
+                // if(selected.length===0)
+                if(selected=="")
                 {
-                    alert('Please select atleast one item');
+                    alert('Please select atleast one item from any sub group');
                     //window.location.reload(true);
                     $("#progress").hide();
                 }
@@ -224,29 +485,39 @@
                     //    alert('Please select atleast one item');
                     //}
                 else{
-                    var selectedValues = $('#MltItem').val();
-                    var dt = $("#ToDate").val();
-                    //var fromDateObj = new Date(frm);
-                    //var frmparts = frm.split("-");
-                    //var data = { selectedValues,companyId,dt,GroupId:selectedValue };
-                    if(selectedValue==412) {
-                        var data = { selectedValues,companyId,dt,GroupId:selectedValue };
-                        $.ajax({
-                            url: baseUrl + "/SagarPetro/GetFGItemsonStocklevel",
-                            type: "POST",
-                            datatype: 'JSON',
-                            data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
+                    var rtp=$('#txtReptype').val();
+                    if(rtp=="" || rtp=="1" ||rtp=="0")
+                    {
+                        alert('selected subgroup(s) report type not defined');
+                        //window.location.reload(true);
+                        $("#progress").hide();
+                    }
+                    else{
+                       // var selectedValues = $('#MltItem').val();
+                        var dt = $("#ToDate").val();
+                        //var fromDateObj = new Date(frm);
+                        //var frmparts = frm.split("-");
+                        //var data = { selectedValues,companyId,dt,GroupId:selectedValue };
+                        //   if(selectedValue==412) {
+                        if(rtp=="2") {//fg
+                            //    var data = { selectedValues,companyId,dt,GroupId:selectedValue };  selected
+                            var data = { selected,companyId,dt };//,GroupId:selectedValue
+                            $.ajax({
+                                url: baseUrl + "/SagarPetro/GetFGItemsonStocklevel",
+                                type: "POST",
+                                datatype: 'JSON',
+                                data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
 
-                            success: function (response) {
-                                debugger;
-                                if (response.status == true) {
-                                    if(response.itemshowmodellist.length>0)
-                                    {
-                                        $('#maindiv').show();
-                                        $("#progress").hide();
-                                        $("#output tr").remove();
-                                        $("#tablehead tr").remove();
-                                        $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
+                                success: function (response) {
+                                    debugger;
+                                    if (response.status == true) {
+                                        if(response.itemshowmodellist.length>0)
+                                        {
+                                            $('#maindiv').show();
+                                            $("#progress").hide();
+                                            $("#output tr").remove();
+                                            $("#tablehead tr").remove();
+                                            $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
                                         <th>Item</th>
                                         <th>Units</th>
                                         <th>Description</th>
@@ -260,7 +531,7 @@
                                         <th>Due Date</th>
                                         </tr>`);
 
-                                        @*for (var i = 0; i < response.itemshowmodellist.length; i++)
+                                            @*for (var i = 0; i < response.itemshowmodellist.length; i++)
                                         {
                                             debugger;
                                             var trHTML = '';
@@ -281,90 +552,92 @@
                                      '</td></tr>';
                                             $('#output').append(trHTML);
                                         }*@
-                                        for (var i = 0; i < response.itemshowmodellist.length; i++) {
-                                            debugger;
-                                            var trHTML = '';
-                                            var formattedDate = response.itemshowmodellist[i].DueDate;
-                                            if(formattedDate!="")
-                                            {
-                                                var parts = formattedDate.split("/");
-                                                //formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
-                                                formattedDate = parts[2] + "-" + (parts[1].length === 1 ? "0" + parts[1] : parts[1]) + "-" + (parts[0].length === 1 ? "0" + parts[0] : parts[0]);
+                                            for (var i = 0; i < response.itemshowmodellist.length; i++) {
+                                                debugger;
+                                                var trHTML = '';
+                                                var formattedDate = response.itemshowmodellist[i].DueDate;
+                                                if(formattedDate!="")
+                                                {
+                                                    var parts = formattedDate.split("/");
+                                                    //formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+                                                    formattedDate = parts[2] + "-" + (parts[1].length === 1 ? "0" + parts[1] : parts[1]) + "-" + (parts[0].length === 1 ? "0" + parts[0] : parts[0]);
+                                                }
+                                                else{ formattedDate='@DateTime.Now.ToString("yyyy-MM-dd")';}
+
+                                                trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
+                                                          '</td><td>' + response.itemshowmodellist[i].Units +
+                                                          '</td><td>' + response.itemshowmodellist[i].Description +
+                                                          '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
+                                                          '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                                          '</td><td>' + response.itemshowmodellist[i].Difference +
+                                                          '</td><td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                                          '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus + // StartDate
+                                                          '</td><td>';
+
+                                                if (response.itemshowmodellist[i].sVoucherNo !== "") {
+                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                      '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                } else {
+                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                      '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                }
+
+                                                trHTML +=// '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                                                          //'</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' + // StartDate
+                                                          '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                                          '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
+                                                          '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
+                                                          '</td></tr>';
+
+                                                $('#output').append(trHTML);
                                             }
-                                            else{ formattedDate='@DateTime.Now.ToString("yyyy-MM-dd")';}
 
-                                            trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
-                                                      '</td><td>' + response.itemshowmodellist[i].Units +
-                                                      '</td><td>' + response.itemshowmodellist[i].Description +
-                                                      '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
-                                                      '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                                      '</td><td>' + response.itemshowmodellist[i].Difference +
-                                                      '</td><td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                                      '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus + // StartDate
-                                                      '</td><td>';
-
-                                            if (response.itemshowmodellist[i].sVoucherNo !== "") {
-                                                // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                  '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                            } else {
-                                                // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                  '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
-                                            }
-
-                                            trHTML +=// '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                                                      //'</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' + // StartDate
-                                                      '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
-                                                      '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
-                                                      '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
-                                                      '</td></tr>';
-
-                                            $('#output').append(trHTML);
                                         }
-
+                                        else{
+                                            alert('No Data found');
+                                            window.location.reload(true);
+                                            $("#progress").hide();
+                                        }
                                     }
-                                    else{
-                                        alert('No Data found');
-                                        window.location.reload(true);
+                                    if (response.status == false) {
+                                        alert(response.Message);
                                         $("#progress").hide();
+                                        // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                                     }
-                                }
-                                if (response.status == false) {
-                                    alert(response.Message);
+
+                                },
+                                error: function (error) {
+                                    //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
+                                    console.log('Error :: ', error);
                                     $("#progress").hide();
-                                    // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                                 }
+                            });
+                        }
+                        // if(rtp==5)
+                        if(rtp=="3")//ii(sfg)
+                        {
+                            //  var data = { selectedValues,companyId,dt,GroupId:selectedValue };
+                            var data = { selected,companyId,dt };//,GroupId:selectedValue
+                            $.ajax({
+                                url: baseUrl + "/SagarPetro/GetSFGItemsonStocklevel",
+                                type: "POST",
+                                datatype: 'JSON',
+                                data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
 
-                            },
-                            error: function (error) {
-                                //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
-                                console.log('Error :: ', error);
-                                $("#progress").hide();
-                            }
-                        });
-                    }
-                    if(selectedValue==5)
-                    {
-                        var data = { selectedValues,companyId,dt,GroupId:selectedValue };
-                        $.ajax({
-                            url: baseUrl + "/SagarPetro/GetSFGItemsonStocklevel",
-                            type: "POST",
-                            datatype: 'JSON',
-                            data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
-
-                            success: function (response) {
-                                debugger;
-                                if (response.status == true) {
-                                    if(response.itemshowmodellist.length>0)
-                                    {
-                                        $('#maindiv').show();
-                                        $("#progress").hide();
-                                        $("#output tr").remove();
-                                        $("#tablehead tr").remove();
-                                        $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
+                                success: function (response) {
+                                    debugger;
+                                    if (response.status == true) {
+                                        if(response.itemshowmodellist.length>0)
+                                        {
+                                            $('#maindiv').show();
+                                            $("#progress").hide();
+                                            $("#output tr").remove();
+                                            $("#tablehead tr").remove();
+                                            $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
                                         <th>Item</th>
                                         <th>Units</th>
                                         <th>Description</th>
@@ -382,134 +655,164 @@
                                         <th>Due Date</th>
                                         <th>Remarks</th>
                                         </tr>`);
-                                        var previousItem = '';
-                                        for (var i = 0; i < response.itemshowmodellist.length; i++)
-                                        {
-                                            var formattedDate = response.itemshowmodellist[i].DueDate;
-                                            if(formattedDate!="")
+                                            var previousItem = '';
+                                            var val=0;
+                                            for (var i = 0; i < response.itemshowmodellist.length; i++)
                                             {
-                                                var parts = formattedDate.split("/");
-                                                //  formattedDate = parts[2] + "-" + (parts[1]) + "-" + parts[0];
-                                                formattedDate = parts[2] + "-" + (parts[1].length === 1 ? "0" + parts[1] : parts[1]) + "-" + (parts[0].length === 1 ? "0" + parts[0] : parts[0]);
-                                            }
-                                            else{ formattedDate='@DateTime.Now.ToString("yyyy-MM-dd")';}
-                                            var currentItem = response.itemshowmodellist[i].Item;;
-                                            var showEmptyValues = currentItem === previousItem;
-                                            if (showEmptyValues) {
-                                                var trHTML = '<tr>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                //trHTML += '<td></td>';
-                                                trHTML +='<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                                '</td><td>'  + response.itemshowmodellist[i].TankMaster +
-                                                    '</td><td>' + response.itemshowmodellist[i].TankCapacity +
-                                    '</td><td>' + response.itemshowmodellist[i].ClosingStock +
-                                    '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
-                                    '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
-                                    '</td><td>';
-
-                                                if (response.itemshowmodellist[i].sVoucherNo !== "") {
-                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                    '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                                } else {
-                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                    '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
-                                                }
-
-                                                trHTML +=
-                                         //'</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                                         //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate
-
-                                        // '</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
-                                         '</td><td>' + '<input style="width:100px;" type="text"  class="form-control clsrate" id="txtRemarks" name="Remarks">' +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty1+
-                                         '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty1+
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Difference1 +
-                                          '</td><td hidden>' + response.itemshowmodellist[i].QtytobeProduced1+
-                                          '</td><td hidden>' + response.itemshowmodellist[i].TopUpTankCapacity1+
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Item +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Units +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Description +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Difference +
-                                           '</td></tr>';
-                                                $('#output').append(trHTML);
-                                            }
-                                            else {
-                                                var trHTML = '';
-                                                // Show actual values
+                                               var  val1=response.itemshowmodellist[i].TankCapacity;//200  150
                                                 var formattedDate = response.itemshowmodellist[i].DueDate;
                                                 if(formattedDate!="")
                                                 {
                                                     var parts = formattedDate.split("/");
-                                                    // formattedDate = parts[2] + "-" + (parts[1] - 1) + "-" + parts[0];
+                                                    //  formattedDate = parts[2] + "-" + (parts[1]) + "-" + parts[0];
                                                     formattedDate = parts[2] + "-" + (parts[1].length === 1 ? "0" + parts[1] : parts[1]) + "-" + (parts[0].length === 1 ? "0" + parts[0] : parts[0]);
                                                 }
                                                 else{ formattedDate='@DateTime.Now.ToString("yyyy-MM-dd")';}
-                                                trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
-                                        '</td><td>' + response.itemshowmodellist[i].Units +
-                                        '</td><td>' + response.itemshowmodellist[i].Description +
-                                        '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
-                                        '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                        '</td><td>' + response.itemshowmodellist[i].Difference +
-                                        '</td><td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                        '</td><td>' + response.itemshowmodellist[i].TankMaster +
-                                        '</td><td>' + response.itemshowmodellist[i].TankCapacity +
+                                                var currentItem = response.itemshowmodellist[i].Item;
+                                                var showEmptyValues = currentItem === previousItem;
+                                                if (showEmptyValues) {
+                                                    val=val+response.itemshowmodellist[i].QtytobeProduced;//200
+                                                    var trHTML = '<tr>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    //trHTML += '<td></td>';
+                                                   // '</td>';
+                                                    if(val>val1)//response.itemshowmodellist[i].QtytobeProduced
+                                                    {
+                                                        val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;//50
+                                                        trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1 + '">' +//100  response.itemshowmodellist[i].TankCapacity
+                                                            '</td>';
+                                                    }
+                                                    else{                                                   
+                                                        trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val + '">' +// response.itemshowmodellist[i].QtytobeProduced
+                                                             '</td>';
+                                                    }
+                                                    //trHTML +='<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                                    trHTML +=  '<td>'  + response.itemshowmodellist[i].TankMaster +
+                                                        '</td><td>' + response.itemshowmodellist[i].TankCapacity +
                                         '</td><td>' + response.itemshowmodellist[i].ClosingStock +
                                         '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
                                         '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
                                         '</td><td>';
 
-                                                if (response.itemshowmodellist[i].sVoucherNo !== "") {
-                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                    '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                                } else {
-                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                    '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    if (response.itemshowmodellist[i].sVoucherNo !== "") {
+                                                        // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                        '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                    } else {
+                                                        // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                        '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    }
+
+                                                    trHTML +=
+                                             //'</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                                             //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate
+
+                                            // '</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
+                                             '</td><td>' + '<input style="width:100px;" type="text"  class="form-control clsrate" id="txtRemarks" name="Remarks">' +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty1+
+                                             '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty1+
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Difference1 +
+                                              '</td><td hidden>' + response.itemshowmodellist[i].QtytobeProduced1+
+                                              '</td><td hidden>' + response.itemshowmodellist[i].TopUpTankCapacity1+
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Item +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Units +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Description +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Difference +
+                                               '</td></tr>';
+                                                    $('#output').append(trHTML);
                                                 }
+                                                else {
+                                                    val=0;
+                                                    var trHTML = '';
+                                                    val=val+response.itemshowmodellist[i].QtytobeProduced;//200
+                                                    //val=val+response.itemshowmodellist[i].QtytobeProduced;
+                                                    // Show actual values
+                                                    var formattedDate = response.itemshowmodellist[i].DueDate;
+                                                    if(formattedDate!="")
+                                                    {
+                                                        var parts = formattedDate.split("/");
+                                                        // formattedDate = parts[2] + "-" + (parts[1] - 1) + "-" + parts[0];
+                                                        formattedDate = parts[2] + "-" + (parts[1].length === 1 ? "0" + parts[1] : parts[1]) + "-" + (parts[0].length === 1 ? "0" + parts[0] : parts[0]);
+                                                    }
+                                                    else{ formattedDate='@DateTime.Now.ToString("yyyy-MM-dd")';}
+                                                    trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
+                                            '</td><td>' + response.itemshowmodellist[i].Units +
+                                            '</td><td>' + response.itemshowmodellist[i].Description +
+                                            '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
+                                            '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                            '</td><td>' + response.itemshowmodellist[i].Difference +
+                                            '</td>';
+                                                    //  if(response.itemshowmodellist[i].QtytobeProduced>val )//150>100=50
+                                                    if(val>val1)
+                                                    {
+                                                        val=val-val;//response.itemshowmodellist[i].QtytobeProduced;//50
+                                                        trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1  + '">' +//100 response.itemshowmodellist[i].TankCapacity
+                                                            '</td>';
+                                                    }
+                                                    else{
+                                                   
+                                                        trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val  + '">' +//response.itemshowmodellist[i].QtytobeProduced
+                                                             '</td>';
+                                                        }
+                                                    trHTML +='<td>' + response.itemshowmodellist[i].TankMaster +
+                                            '</td><td>' + response.itemshowmodellist[i].TankCapacity +
+                                            '</td><td>' + response.itemshowmodellist[i].ClosingStock +
+                                            '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
+                                            '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
+                                            '</td><td>';
 
-                                                trHTML +=
-                                         //'</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                                         //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate
+                                                    if (response.itemshowmodellist[i].sVoucherNo !== "") {
+                                                        // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                        '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                    } else {
+                                                        // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                        '</td><td><input type="date" required="required" value=' + formattedDate + ' class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    }
 
-                                        // '</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
-                                         '</td><td>' + '<input style="width:100px;" type="text"  class="form-control clsrate" id="txtRemarks" name="Remarks">' +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
-                                          '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty1+
-                                         '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty1+
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Difference1 +
-                                          '</td><td hidden>' + response.itemshowmodellist[i].QtytobeProduced1+
-                                          '</td><td hidden>' + response.itemshowmodellist[i].TopUpTankCapacity1+
-                                           '</td><td hidden>' + response.itemshowmodellist[i].Item +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Units +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Description +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Difference +
-                                         '</td></tr>';
-                                                $('#output').append(trHTML);
+                                                    trHTML +=
+                                             //'</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                                             //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate
+
+                                            // '</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
+                                             '</td><td>' + '<input style="width:100px;" type="text"  class="form-control clsrate" id="txtRemarks" name="Remarks">' +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
+                                              '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty1+
+                                             '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty1+
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Difference1 +
+                                              '</td><td hidden>' + response.itemshowmodellist[i].QtytobeProduced1+
+                                              '</td><td hidden>' + response.itemshowmodellist[i].TopUpTankCapacity1+
+                                               '</td><td hidden>' + response.itemshowmodellist[i].Item +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Units +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Description +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Difference +
+                                             '</td></tr>';
+                                                    $('#output').append(trHTML);
+                                                }
+                                                previousItem = response.itemshowmodellist[i].Item;
+                                               
                                             }
-                                            previousItem = response.itemshowmodellist[i].Item;
-                                        }
-                                        @*for (var i = 0; i < response.itemshowmodellist.length; i++)
+                                            @*for (var i = 0; i < response.itemshowmodellist.length; i++)
                                         {
                                             debugger;
                                             var trHTML = '';
@@ -559,47 +862,49 @@
                                             $('#output').append(trHTML);
                                         }*@
 
-                                    }
-                                    else{
-                                        alert('No Data found');
+                                        }
+                                        else{
+                                            alert('No Data found');
 
-                                        window.location.reload(true);
-                                        $("#progress").hide();
+                                            window.location.reload(true);
+                                            $("#progress").hide();
+                                        }
                                     }
-                                }
-                                if (response.status == false) {
-                                    alert(response.Message);
+                                    if (response.status == false) {
+                                        alert(response.Message);
+                                        $("#progress").hide();
+                                        // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
+                                    }
+
+                                },
+                                error: function (error) {
+                                    //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
+                                    console.log('Error :: ', error);
                                     $("#progress").hide();
-                                    // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                                 }
+                            });
+                        }
+                        //   if(rtp==427)
+                        if(rtp=="4")//base oils
+                        {
+                            //  var data = { selectedValues,companyId,dt,GroupId:selectedValue };
+                            var data = { selected,companyId,dt };//,GroupId:selectedValue
+                            $.ajax({
+                                url: baseUrl + "/SagarPetro/GetRMBaseOils",
+                                type: "POST",
+                                datatype: 'JSON',
+                                data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
 
-                            },
-                            error: function (error) {
-                                //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
-                                console.log('Error :: ', error);
-                                $("#progress").hide();
-                            }
-                        });
-                    }
-                    if(selectedValue==427)
-                    {
-                        var data = { selectedValues,companyId,dt,GroupId:selectedValue };
-                        $.ajax({
-                            url: baseUrl + "/SagarPetro/GetRMBaseOils",
-                            type: "POST",
-                            datatype: 'JSON',
-                            data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
-
-                            success: function (response) {
-                                debugger;
-                                if (response.status == true) {
-                                    if(response.itemshowmodellist.length>0)
-                                    {
-                                        $('#maindiv').show();
-                                        $("#progress").hide();
-                                        $("#output tr").remove();
-                                        $("#tablehead tr").remove();
-                                        $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
+                                success: function (response) {
+                                    debugger;
+                                    if (response.status == true) {
+                                        if(response.itemshowmodellist.length>0)
+                                        {
+                                            $('#maindiv').show();
+                                            $("#progress").hide();
+                                            $("#output tr").remove();
+                                            $("#tablehead tr").remove();
+                                            $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
                                         <th>Item</th>
                                         <th>Units</th>
                                         <th>Description</th>
@@ -617,151 +922,184 @@
                                         <th>Due Date</th>
                                         <th>Warehouse</th>
                                         </tr>`);
-                                        var previousItem = '';
-                                        for (var i = 0; i < response.itemshowmodellist.length; i++)
-                                        {
-                                            @*var formattedDate = response.itemshowmodellist[i].DueDate;
+                                            var previousItem = '';
+                                            //var previousItem = '';
+                                           var val=0;
+                                            var valq=0;
+                                            for (var i = 0; i < response.itemshowmodellist.length; i++)
+                                            {
+                                               // var val=0;
+                                                //  val=response.itemshowmodellist[i].TankCapacity;
+                                                var  val1=response.itemshowmodellist[i].TankCapacity;//200  150
+                                                @*var formattedDate = response.itemshowmodellist[i].DueDate;
                                             if(formattedDate!="")
                                             {
                                                 var parts = formattedDate.split("/");
                                                 formattedDate = parts[2] + "-" + (parts[1] - 1) + "-" + parts[0];
                                             }
                                             else{ formattedDate='@DateTime.Now.ToString("yyyy-MM-dd")';}*@
-                                            var currentItem = response.itemshowmodellist[i].Item;//Whid
+                                                var currentItem = response.itemshowmodellist[i].Item;//Whid
 
-                                            var showEmptyValues = currentItem === previousItem;
-                                            var dropdownId = 'Whdd_' + i;
-                                            var selectedValue = response.itemshowmodellist[i].Whid;
-                                            if (showEmptyValues) {
-                                                var trHTML = '<tr>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                //  trHTML += '<td></td>';
-                                                trHTML +='<td>'+ '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                                 '</td><td>'   + response.itemshowmodellist[i].TankMaster +
-                                                    '</td><td>' + response.itemshowmodellist[i].TankCapacity +
-                                    '</td><td>' + response.itemshowmodellist[i].ClosingStock +
-                                    '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
-                                    '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
-                                    '</td><td>';
-                                                if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
-                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                                } else {
-                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                var showEmptyValues = currentItem === previousItem;
+                                                var dropdownId = 'Whdd_' + i;
+                                                var selectedValue = response.itemshowmodellist[i].Whid;
+                                                if (showEmptyValues) {
+                                                    val=val+response.itemshowmodellist[i].QtytobeProduced;
+                                                    var trHTML = '<tr>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    // trHTML += '</td>';
+                                                    if(val>val1)//250>100
+                                                    {
+                                                        val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;150 250
+                                                        trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1 + '">' +//100   response.itemshowmodellist[i].TankCapacity
+                                                            '</td>';
+                                                    }
+                                                    else{                                                   
+                                                        trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val + '">' +// response.itemshowmodellist[i].QtytobeProduced
+                                                             '</td>';
+                                                    }
+                                                  //  trHTML +='<td>'+ '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                                    trHTML +=  '<td>'   + response.itemshowmodellist[i].TankMaster +
+                                                        '</td><td>' + response.itemshowmodellist[i].TankCapacity +
+                                        '</td><td>' + response.itemshowmodellist[i].ClosingStock +
+                                        '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
+                                        '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
+                                        '</td><td>';
+                                                    if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
+                                                        // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                        '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                    } else {
+                                                        // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                        '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    }
+                                                    trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
+                                                    for (var j = 0; j < response.ddlist.length; j++) {
+                                                        var optionValue = response.ddlist[j].Value;
+                                                        var optionText = response.ddlist[j].Text;
+                                                        var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';
+
+                                                        trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
+                                                    }
+
+                                                    trHTML += '</select>';//</td>
+                                                    trHTML +=
+                                            // '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                                             //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate
+
+                                          @*'</td><td>' + ` @Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })` +*@
+
+                                             //'</td><td>' + response.itemshowmodellist[i].Remarks +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
+                                              '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty1+
+                                             '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty1+
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Difference1 +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Item +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Units +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Description +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Difference +
+                                             '</td></tr>';
+                                                    $('#output').append(trHTML);
                                                 }
-                                                trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
-                                                for (var j = 0; j < response.ddlist.length; j++) {
-                                                    var optionValue = response.ddlist[j].Value;
-                                                    var optionText = response.ddlist[j].Text;
-                                                    var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';
-
-                                                    trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
-                                                }
-
-                                                trHTML += '</select>';//</td>
-                                                trHTML +=
-                                        // '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                                         //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate
-
-                                      @*'</td><td>' + ` @Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })` +*@
-
-                                         //'</td><td>' + response.itemshowmodellist[i].Remarks +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
-                                          '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty1+
-                                         '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty1+
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Difference1 +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Item +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Units +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Description +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Difference +
-                                         '</td></tr>';
-                                                $('#output').append(trHTML);
-                                            }
-                                            else {
-                                                var trHTML = '';
-                                                // Show actual values
-                                                @*var formattedDate = response.itemshowmodellist[i].DueDate;
+                                                else {
+                                                    val=0;
+                                                    var trHTML = '';
+                                                    val=val+response.itemshowmodellist[i].QtytobeProduced;//100
+                                                    // Show actual values
+                                                    @*var formattedDate = response.itemshowmodellist[i].DueDate;
                                                 if(formattedDate!="")
                                                 {
                                                     var parts = formattedDate.split("/");
                                                     formattedDate = parts[2] + "-" + (parts[1] - 1) + "-" + parts[0];
                                                 }
                                                 else{ formattedDate='@DateTime.Now.ToString("yyyy-MM-dd")';}*@
-                                                trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
-                                        '</td><td>' + response.itemshowmodellist[i].Units +
-                                        '</td><td>' + response.itemshowmodellist[i].Description +
-                                        '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
-                                        '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                        '</td><td>' + response.itemshowmodellist[i].Difference +
-                                        '</td><td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                        '</td><td>' + response.itemshowmodellist[i].TankMaster +
-                                        '</td><td>' + response.itemshowmodellist[i].TankCapacity +
-                                        '</td><td>' + response.itemshowmodellist[i].ClosingStock +
-                                        '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
-                                        '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
-                                         '</td><td>';
-
-                                                if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
-                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                                } else {
-                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
+                                            '</td><td>' + response.itemshowmodellist[i].Units +
+                                            '</td><td>' + response.itemshowmodellist[i].Description +
+                                            '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
+                                            '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                            '</td><td>' + response.itemshowmodellist[i].Difference +
+                                            '</td>';
+                                                    //val1=50;
+                                              if( val>val1 )//100>50
+                                                    {
+                                                  val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;//50
+                                                  trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + val1 + '">' +//100 response.itemshowmodellist[i].TankCapacity
+                                                            '</td>';
+                                                    }
+                                                else{
+                                                  //val=0;
+                                                  trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + val + '">' +//response.itemshowmodellist[i].QtytobeProduced
+                                                             '</td>';
                                                 }
-                                                trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
-                                                for (var j = 0; j < response.ddlist.length; j++) {
-                                                    var optionValue = response.ddlist[j].Value;
-                                                    var optionText = response.ddlist[j].Text;
-                                                    var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
+                                         //   '</td><td>' + response.itemshowmodellist[i].Difference +
+                                           //   trHTML +=   '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                              trHTML +=  '<td>' + response.itemshowmodellist[i].TankMaster +
+                                            '</td><td>' + response.itemshowmodellist[i].TankCapacity +
+                                            '</td><td>' + response.itemshowmodellist[i].ClosingStock +
+                                            '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
+                                            '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
+                                             '</td><td>';
 
-                                                    trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
+                                                    if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
+                                                        // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                        '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                    } else {
+                                                        // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                        '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    }
+                                                    trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
+                                                    for (var j = 0; j < response.ddlist.length; j++) {
+                                                        var optionValue = response.ddlist[j].Value;
+                                                        var optionText = response.ddlist[j].Text;
+                                                        var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
+
+                                                        trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
+                                                    }
+
+                                                    trHTML += '</select>';//</td>
+                                                    trHTML +=
+                                                         @*'</td><td>' + ` @Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })` +*@
+                                            // '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                                             //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate
+
+                                           //  '</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
+                                             //'</td><td>' + response.itemshowmodellist[i].Remarks +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
+                                              '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty1+
+                                             '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty1+
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Difference1 +
+                                              '</td><td hidden>' + response.itemshowmodellist[i].Item +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Units +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Description +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Difference +
+                                             '</td></tr>';
+                                                    $('#output').append(trHTML);
                                                 }
+                                                previousItem = response.itemshowmodellist[i].Item;
 
-                                                trHTML += '</select>';//</td>
-                                                trHTML +=
-                                                     @*'</td><td>' + ` @Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })` +*@
-                                        // '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                                         //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate
-
-                                       //  '</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
-                                         //'</td><td>' + response.itemshowmodellist[i].Remarks +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
-                                          '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty1+
-                                         '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty1+
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Difference1 +
-                                          '</td><td hidden>' + response.itemshowmodellist[i].Item +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Units +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Description +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Difference +
-                                         '</td></tr>';
-                                                $('#output').append(trHTML);
                                             }
-                                            previousItem = response.itemshowmodellist[i].Item;
-     
-                                        }
-                                        @*for (var i = 0; i < response.itemshowmodellist.length; i++)
+                                            @*for (var i = 0; i < response.itemshowmodellist.length; i++)
                                         {
                                             debugger;
                                             var trHTML = '';
@@ -804,56 +1142,58 @@
                                             $('#output').append(trHTML);
                                         }*@
 
-                                    }
-                                    else{
-                                        alert('No Data found');
+                                        }
+                                        else{
+                                            alert('No Data found');
 
+                                            window.location.reload(true);
+                                            $("#progress").hide();
+                                        }
+                                    }
+                                    if (response.status == false) {
+                                        alert(response.Message);
+                                        // location.reload(true);
                                         window.location.reload(true);
                                         $("#progress").hide();
+                                        // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                                     }
-                                }
-                                if (response.status == false) {
-                                    alert(response.Message);
-                                    // location.reload(true);
-                                    window.location.reload(true);
+
+                                },
+                                error: function (error) {
+                                    //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
+                                    console.log('Error :: ', error);
                                     $("#progress").hide();
-                                    // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                                 }
+                            });
+                        }
+                        // if(rtp==428)
+                        if(rtp=="5")//additives
+                        {
+                            //var selectedwh=$('#Whdd option:selected').val();
+                            //if(selectedwh==0){
+                            //    alert('Please select Warehouse');
+                            //    $("#progress").hide();
+                            //}
+                            //else{
+                            //    var strwh=$('#Whdd option:selected').text();
+                            //  var data = { selectedValues,companyId,dt,GroupId:selectedValue };//,strwh,selectedwh
+                            var data = { selected,companyId,dt };//,GroupId:selectedValue
+                            $.ajax({
+                                url: baseUrl + "/SagarPetro/GetRMBaseAdditives",
+                                type: "POST",
+                                datatype: 'JSON',
+                                data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
 
-                            },
-                            error: function (error) {
-                                //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
-                                console.log('Error :: ', error);
-                                $("#progress").hide();
-                            }
-                        });
-                    }
-                    if(selectedValue==428)
-                    {
-                        //var selectedwh=$('#Whdd option:selected').val();
-                        //if(selectedwh==0){
-                        //    alert('Please select Warehouse');
-                        //    $("#progress").hide();
-                        //}
-                        //else{
-                        //    var strwh=$('#Whdd option:selected').text();
-                        var data = { selectedValues,companyId,dt,GroupId:selectedValue };//,strwh,selectedwh
-                        $.ajax({
-                            url: baseUrl + "/SagarPetro/GetRMBaseAdditives",
-                            type: "POST",
-                            datatype: 'JSON',
-                            data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
-
-                            success: function (response) {
-                                debugger;
-                                if (response.status == true) {
-                                    if(response.itemshowmodellist.length>0)
-                                    {
-                                        $('#maindiv').show();
-                                        $("#progress").hide();
-                                        $("#output tr").remove();
-                                        $("#tablehead tr").remove();
-                                        $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
+                                success: function (response) {
+                                    debugger;
+                                    if (response.status == true) {
+                                        if(response.itemshowmodellist.length>0)
+                                        {
+                                            $('#maindiv').show();
+                                            $("#progress").hide();
+                                            $("#output tr").remove();
+                                            $("#tablehead tr").remove();
+                                            $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
                                         <th>Item</th>
                                         <th>Warehouse</th>//
                                         <th>Units</th>
@@ -867,122 +1207,122 @@
                                         <th>Purchase Indent<br />DocNo</th>
                                         <th>Due Date</th>
                                         </tr>`);
-                                        var previousItem = '';
-                                        for (var i = 0; i < response.itemshowmodellist.length; i++)
-                                        {
-                                            debugger;
-                                            var currentItem = response.itemshowmodellist[i].Item;
-                                            var dropdownId = 'Whdd_' + i;
-                                            var selectedValue = response.itemshowmodellist[i].Whid;
-                                            var showEmptyValues = currentItem === previousItem;
-                                            if (showEmptyValues){
-                                                var trHTML = '<tr>';
-                                                trHTML += '<td></td>';
-                                                @*trHTML += '<td>'+`@Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd"})`+'</td>';*@
-                                                trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
-                                                for (var j = 0; j < response.ddlist.length; j++) {
-                                                    var optionValue = response.ddlist[j].Value;
-                                                    var optionText = response.ddlist[j].Text;
-                                                    var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
+                                            var previousItem = '';
+                                            for (var i = 0; i < response.itemshowmodellist.length; i++)
+                                            {
+                                                debugger;
+                                                var currentItem = response.itemshowmodellist[i].Item;
+                                                var dropdownId = 'Whdd_' + i;
+                                                var selectedValue = response.itemshowmodellist[i].Whid;
+                                                var showEmptyValues = currentItem === previousItem;
+                                                if (showEmptyValues){
+                                                    var trHTML = '<tr>';
+                                                    trHTML += '<td></td>';
+                                                    @*trHTML += '<td>'+`@Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd"})`+'</td>';*@
+                                                    trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
+                                                    for (var j = 0; j < response.ddlist.length; j++) {
+                                                        var optionValue = response.ddlist[j].Value;
+                                                        var optionText = response.ddlist[j].Text;
+                                                        var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
 
-                                                    trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
-                                                }
+                                                        trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
+                                                    }
 
-                                                trHTML += '</select></td>';//</td>
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML +='<td>'+ '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                                     '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +
-                                                     '</td><td>';
-                                                if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
-                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                                } else {
-                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
-                                                }
-                                                trHTML += '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
-                                     '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
-                                     '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
-                                     '</td><td hidden>' + response.itemshowmodellist[i].Whid +
-                                     '</td><td hidden>' + response.itemshowmodellist[i].Item +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Warehouse +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Units +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Description +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Difference +
-                                     '</td></tr>';
-                                                $('#output').append(trHTML);
-                                            }
-                                            else{
-                                                var trHTML = '';
-                                                trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
-                                        '</td>';@*<td>' + `@Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })` +*@
-                                                trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
-                                                for (var j = 0; j < response.ddlist.length; j++) {
-                                                    var optionValue = response.ddlist[j].Value;
-                                                    var optionText = response.ddlist[j].Text;
-                                                    var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
-
-                                                    trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
-                                                }
-
-                                                trHTML += '</select>';//</td>    
-                                                trHTML += '</td><td>' + response.itemshowmodellist[i].Units +
-                                        '</td><td>' + response.itemshowmodellist[i].Description +
-                                        '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
-                                        '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                        '</td><td>' + response.itemshowmodellist[i].Difference +
-                                        '</td><td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                       // '</td><td>' + response.itemshowmodellist[i].TankMaster +
-                                        //'</td><td>' + response.itemshowmodellist[i].TankCapacity +
-                                       // '</td><td>' + response.itemshowmodellist[i].ClosingStock +
-                                       // '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
-                                        '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
-                                         '</td><td>';
-
-                                                if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
-                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                                } else {
-                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
-                                                }
-
-                                                trHTML +=
-                                        // '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                                         //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate Whid
-
-                                         //'</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
-                                         //'</td><td>' + response.itemshowmodellist[i].Remarks +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                                    trHTML += '</select></td>';//</td>
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML +='<td>'+ '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                                         '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +
+                                                         '</td><td>';
+                                                    if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
+                                                        // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                    } else {
+                                                        // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    }
+                                                    trHTML += '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
                                          '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
                                          '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
                                          '</td><td hidden>' + response.itemshowmodellist[i].Whid +
                                          '</td><td hidden>' + response.itemshowmodellist[i].Item +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Warehouse +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Units +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Description +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Difference +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Warehouse +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Units +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Description +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Difference +
                                          '</td></tr>';
-                                                $('#output').append(trHTML);
-                                            }
-                                            previousItem = response.itemshowmodellist[i].Item;
-                                            @*var trHTML = '';
+                                                    $('#output').append(trHTML);
+                                                }
+                                                else{
+                                                    var trHTML = '';
+                                                    trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
+                                            '</td>';@*<td>' + `@Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })` +*@
+                                                    trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
+                                                    for (var j = 0; j < response.ddlist.length; j++) {
+                                                        var optionValue = response.ddlist[j].Value;
+                                                        var optionText = response.ddlist[j].Text;
+                                                        var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
+
+                                                        trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
+                                                    }
+
+                                                    trHTML += '</select>';//</td>
+                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].Units +
+                                            '</td><td>' + response.itemshowmodellist[i].Description +
+                                            '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
+                                            '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                            '</td><td>' + response.itemshowmodellist[i].Difference +
+                                            '</td><td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                           // '</td><td>' + response.itemshowmodellist[i].TankMaster +
+                                            //'</td><td>' + response.itemshowmodellist[i].TankCapacity +
+                                           // '</td><td>' + response.itemshowmodellist[i].ClosingStock +
+                                           // '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
+                                            '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
+                                             '</td><td>';
+
+                                                    if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
+                                                        // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                    } else {
+                                                        // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    }
+
+                                                    trHTML +=
+                                            // '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                                             //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate Whid
+
+                                             //'</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
+                                             //'</td><td>' + response.itemshowmodellist[i].Remarks +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Whid +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Item +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Warehouse +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Units +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Description +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Difference +
+                                             '</td></tr>';
+                                                    $('#output').append(trHTML);
+                                                }
+                                                previousItem = response.itemshowmodellist[i].Item;
+                                                @*var trHTML = '';
                                                 trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
                                         '</td><td>' + response.itemshowmodellist[i].Warehouse +
                                         '</td><td>' + response.itemshowmodellist[i].Units +
@@ -1022,59 +1362,61 @@
                                          '</td><td hidden>' + response.itemshowmodellist[i].Whid +
                                          '</td></tr>';
                                                 $('#output').append(trHTML);*@
+                                            }
+
                                         }
+                                        else{
+                                            alert('No Data found');
 
+                                            window.location.reload(true);
+                                            $("#progress").hide();
+                                        }
                                     }
-                                    else{
-                                        alert('No Data found');
-
+                                    if (response.status == false) {
+                                        alert(response.Message);
+                                        // location.reload(true);
                                         window.location.reload(true);
                                         $("#progress").hide();
+                                        // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                                     }
-                                }
-                                if (response.status == false) {
-                                    alert(response.Message);
-                                    // location.reload(true);
-                                    window.location.reload(true);
+
+                                },
+                                error: function (error) {
+                                    //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
+                                    console.log('Error :: ', error);
                                     $("#progress").hide();
-                                    // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                                 }
+                            });
+                            // }
+                        }
+                        // if(rtp==12)
+                        if(rtp=="6")//pm
+                        {
+                            //var selectedwh=$('#Whdd option:selected').val();
+                            //if(selectedwh==0){
+                            //    alert('Please select Warehouse');
+                            //    $("#progress").hide();
+                            //}
+                            //else{
+                            // var strwh=$('#Whdd option:selected').text();
+                            // var data = { selectedValues,companyId,dt,GroupId:selectedValue};//,strwh,selectedwh
+                            var data = { selected,companyId,dt };//,GroupId:selectedValue
+                            $.ajax({
+                                url: baseUrl + "/SagarPetro/GetPm",
+                                type: "POST",
+                                datatype: 'JSON',
+                                data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
 
-                            },
-                            error: function (error) {
-                                //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
-                                console.log('Error :: ', error);
-                                $("#progress").hide();
-                            }
-                        });
-                        // }
-                    }
-                    if(selectedValue==12)
-                    {
-                        //var selectedwh=$('#Whdd option:selected').val();
-                        //if(selectedwh==0){
-                        //    alert('Please select Warehouse');
-                        //    $("#progress").hide();
-                        //}
-                        //else{
-                        // var strwh=$('#Whdd option:selected').text();
-                        var data = { selectedValues,companyId,dt,GroupId:selectedValue};//,strwh,selectedwh
-                        $.ajax({
-                            url: baseUrl + "/SagarPetro/GetPm",
-                            type: "POST",
-                            datatype: 'JSON',
-                            data: data,//{ "CompanyId": logDetails.CompanyId, "SessionId": logDetails.SessionId, "LoginId": logDetails.LoginId, "vtype": logDetails.iVoucherType, "DocNo": docNo },
-
-                            success: function (response) {
-                                debugger;
-                                if (response.status == true) {
-                                    if(response.itemshowmodellist.length>0)
-                                    {
-                                        $('#maindiv').show();
-                                        $("#progress").hide();
-                                        $("#output tr").remove();
-                                        $("#tablehead tr").remove();
-                                        $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
+                                success: function (response) {
+                                    debugger;
+                                    if (response.status == true) {
+                                        if(response.itemshowmodellist.length>0)
+                                        {
+                                            $('#maindiv').show();
+                                            $("#progress").hide();
+                                            $("#output tr").remove();
+                                            $("#tablehead tr").remove();
+                                            $('#tablehead').append(`<tr class="table-head" style="width:120px;background-color: #428bca;">
                                         <th>Item</th>
                                         <th>Warehouse</th>//
                                         <th>Units</th>
@@ -1088,123 +1430,123 @@
                                         <th>Purchase Indent<br />DocNo</th>
                                         <th>Due Date</th>
                                         </tr>`);
-                                        var previousItem = '';
-                                        for (var i = 0; i < response.itemshowmodellist.length; i++)
-                                        {
-                                            debugger;
-                                            var currentItem = response.itemshowmodellist[i].Item;
-                                            var showEmptyValues = currentItem === previousItem;
-                                            var dropdownId = 'Whdd_' + i;
-                                            var selectedValue = response.itemshowmodellist[i].Whid;
-                                            if (showEmptyValues){
-                                                var trHTML = '<tr>';
-                                                trHTML += '<td></td>';
-                                                @*trHTML += '<td>'+` @Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })`+'</td>';*@
-                                                trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
-                                                for (var j = 0; j < response.ddlist.length; j++) {
-                                                    var optionValue = response.ddlist[j].Value;
-                                                    var optionText = response.ddlist[j].Text;
-                                                    var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
+                                            var previousItem = '';
+                                            for (var i = 0; i < response.itemshowmodellist.length; i++)
+                                            {
+                                                debugger;
+                                                var currentItem = response.itemshowmodellist[i].Item;
+                                                var showEmptyValues = currentItem === previousItem;
+                                                var dropdownId = 'Whdd_' + i;
+                                                var selectedValue = response.itemshowmodellist[i].Whid;
+                                                if (showEmptyValues){
+                                                    var trHTML = '<tr>';
+                                                    trHTML += '<td></td>';
+                                                    @*trHTML += '<td>'+` @Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })`+'</td>';*@
+                                                    trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
+                                                    for (var j = 0; j < response.ddlist.length; j++) {
+                                                        var optionValue = response.ddlist[j].Value;
+                                                        var optionText = response.ddlist[j].Text;
+                                                        var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
 
-                                                    trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
-                                                }
+                                                        trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
+                                                    }
 
-                                                trHTML += '</select></td>';//</td>
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML += '<td></td>';
-                                                trHTML +='<td>'+ '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                                     '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +
-                                                     '</td><td>';
-                                                if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
-                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                                } else {
-                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
-                                                }
-                                                trHTML += '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
-                                     '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
-                                     '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
-                                     '</td><td hidden>' + response.itemshowmodellist[i].Whid +
-                                       '</td><td hidden>' + response.itemshowmodellist[i].Item +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Warehouse +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Units +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Description +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Difference +
-                                     '</td></tr>';
-                                                $('#output').append(trHTML);
-                                            }
-                                            else{
-                                                var trHTML = '';
-                                                trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
-                                        '</td>';@*<td>' +  `@Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })` +*@
-                                                trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
-                                                for (var j = 0; j < response.ddlist.length; j++) {
-                                                    var optionValue = response.ddlist[j].Value;
-                                                    var optionText = response.ddlist[j].Text;
-                                                    var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
-
-                                                    trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
-                                                }
-
-                                                trHTML += '</select>';//</td>    
-                                                trHTML +=
-                                        '</td><td>' + response.itemshowmodellist[i].Units +
-                                        '</td><td>' + response.itemshowmodellist[i].Description +
-                                        '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
-                                        '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                        '</td><td>' + response.itemshowmodellist[i].Difference +
-                                        '</td><td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                       // '</td><td>' + response.itemshowmodellist[i].TankMaster +
-                                        //'</td><td>' + response.itemshowmodellist[i].TankCapacity +
-                                       // '</td><td>' + response.itemshowmodellist[i].ClosingStock +
-                                       // '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
-                                        '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
-                                         '</td><td>';
-
-                                                if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
-                                                    // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
-                                                } else {
-                                                    // If ProductionPlanningDocNo is empty, create a regular checkbox
-                                                    trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
-                                                    trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
-                                                }
-
-                                                trHTML +=
-                                        // '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
-                                         //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate Whid
-
-                                         //'</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
-                                         //'</td><td>' + response.itemshowmodellist[i].Remarks +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                                    trHTML += '</select></td>';//</td>
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML += '<td></td>';
+                                                    trHTML +='<td>'+ '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                                         '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +
+                                                         '</td><td>';
+                                                    if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
+                                                        // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                    } else {
+                                                        // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    }
+                                                    trHTML += '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
                                          '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
                                          '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
                                          '</td><td hidden>' + response.itemshowmodellist[i].Whid +
-                                         '</td><td hidden>' + response.itemshowmodellist[i].Item +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Warehouse +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Units +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Description +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
-                                        '</td><td hidden>' + response.itemshowmodellist[i].Difference +
+                                           '</td><td hidden>' + response.itemshowmodellist[i].Item +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Warehouse +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Units +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Description +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Difference +
                                          '</td></tr>';
-                                                $('#output').append(trHTML);
-                                            }
-                                            previousItem = response.itemshowmodellist[i].Item;
-                                            @*var trHTML = '';
+                                                    $('#output').append(trHTML);
+                                                }
+                                                else{
+                                                    var trHTML = '';
+                                                    trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
+                                            '</td>';@*<td>' +  `@Html.DropDownList("Warehouse", (IEnumerable<SelectListItem>)ViewBag.wh, new { @class = "form-control", @style = "margin-left:-2px;width: 183px", @id = "Whdd" })` +*@
+                                                    trHTML += '<td><select class="form-control ddid" style="margin-left:-2px;width: 183px" id="' + dropdownId + '">';
+                                                    for (var j = 0; j < response.ddlist.length; j++) {
+                                                        var optionValue = response.ddlist[j].Value;
+                                                        var optionText = response.ddlist[j].Text;
+                                                        var isSelected = (parseInt(optionValue) === selectedValue) ? 'selected' : '';//parseInt(optionText)
+
+                                                        trHTML += '<option value="' + optionValue + '" ' + isSelected + '>' + optionText + '</option>';
+                                                    }
+
+                                                    trHTML += '</select>';//</td>
+                                                    trHTML +=
+                                            '</td><td>' + response.itemshowmodellist[i].Units +
+                                            '</td><td>' + response.itemshowmodellist[i].Description +
+                                            '</td><td>' + response.itemshowmodellist[i].AvailableStockQty +
+                                            '</td><td>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                            '</td><td>' + response.itemshowmodellist[i].Difference +
+                                            '</td><td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                           // '</td><td>' + response.itemshowmodellist[i].TankMaster +
+                                            //'</td><td>' + response.itemshowmodellist[i].TankCapacity +
+                                           // '</td><td>' + response.itemshowmodellist[i].ClosingStock +
+                                           // '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
+                                            '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
+                                             '</td><td>';
+
+                                                    if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
+                                                        // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox" disabled>';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" disabled></td>';
+                                                    } else {
+                                                        // If ProductionPlanningDocNo is empty, create a regular checkbox
+                                                        trHTML += '<input style="width:13px; margin-top: -7px;" type="checkbox" class="form-control" id="chkbox" name="checkbox">';
+                                                        trHTML += '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                    '</td><td><input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate"></td>';
+                                                    }
+
+                                                    trHTML +=
+                                            // '</td><td>' + response.itemshowmodellist[i].ProductionPlanningDocNo +
+                                             //'</td><td>' + response.itemshowmodellist[i].DueDate +//StartDate Whid
+
+                                             //'</td><td>' + '<input type="date" required="required" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width:119px; margin-left:-7px;" id="GridDate" name="GridDate" />' +
+                                             //'</td><td>' + response.itemshowmodellist[i].Remarks +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].ItemCode +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Itemid +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].UnitId +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Whid +
+                                             '</td><td hidden>' + response.itemshowmodellist[i].Item +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Warehouse +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Units +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Description +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].AvailableStockQty +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].SafetyLevelQty +
+                                            '</td><td hidden>' + response.itemshowmodellist[i].Difference +
+                                             '</td></tr>';
+                                                    $('#output').append(trHTML);
+                                                }
+                                                previousItem = response.itemshowmodellist[i].Item;
+                                                @*var trHTML = '';
                                                 trHTML += '<tr><td>' + response.itemshowmodellist[i].Item +
                                         '</td><td>' + response.itemshowmodellist[i].Warehouse +
                                         '</td><td>' + response.itemshowmodellist[i].Units +
@@ -1244,36 +1586,36 @@
                                          '</td><td hidden>' + response.itemshowmodellist[i].Whid +
                                          '</td></tr>';
                                                 $('#output').append(trHTML);*@
+                                            }
+
                                         }
+                                        else{
+                                            alert('No Data found');
 
+                                            window.location.reload(true);
+                                            $("#progress").hide();
+                                        }
                                     }
-                                    else{
-                                        alert('No Data found');
-
+                                    if (response.status == false) {
+                                        alert(response.Message);
+                                        // location.reload(true);
                                         window.location.reload(true);
                                         $("#progress").hide();
+                                        // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
                                     }
-                                }
-                                if (response.status == false) {
-                                    alert(response.Message);
-                                    // location.reload(true);
-                                    window.location.reload(true);
-                                    $("#progress").hide();
-                                    // Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, true)
-                                }
 
-                            },
-                            error: function (error) {
-                                //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
-                                console.log('Error :: ', error);
-                                $("#progress").hide();
-                            }
-                        });
-                        // }
+                                },
+                                error: function (error) {
+                                    //  Focus8WAPI.continueModule(Focus8WAPI.ENUMS.MODULE_TYPE.TRANSACTION, false)
+                                    console.log('Error :: ', error);
+                                    $("#progress").hide();
+                                }
+                            });
+                            // }
+                        }
                     }
                 }
             }
-
         });
         function gotoClosePage()
         {
@@ -1282,7 +1624,8 @@
         $('#btnExcel').click(function(){
             debugger;
             $("#progress").show();
-            var selectedValue = $('#ItemGroup option:selected').val();
+            //  var selectedValue = $('#ItemGroup option:selected').val();
+            var selectedValue =$('#txtReptype').val();
             var checkedCheckboxes = $("#output input[type=checkbox]:checked");
             //if (checkedCheckboxes.length === 0) {
             //    alert("Please select at least one row from the grid.");
@@ -1291,7 +1634,8 @@
             //else
             //{
             var collectedData = [];
-            if(selectedValue==5)//sfg excel
+            //if(selectedValue==5)//sfg excel
+            if(selectedValue=="3")//sfg excel
             {
                 $("#output tr").each(function() {
                     var row = $(this);
@@ -1360,7 +1704,8 @@
                     }
                 });
             }
-            if(selectedValue==412)//fg excel
+            //if(selectedValue==412)//fg excel
+            if(selectedValue=="2")//fg excel
             {
                 $("#output tr").each(function() {
                     debugger;
@@ -1426,8 +1771,8 @@
                     }
                 });
             }
-            if(selectedValue==427){//baseoils excel
-
+           // if(selectedValue==427){//baseoils excel
+            if(selectedValue=="4"){//baseoils excel
                 //if(selectedwh==0){
                 //    alert('Please select Warehouse');
                 //    $("#progress").hide();
@@ -1521,7 +1866,8 @@
                 }
                 //}
             }
-            if(selectedValue==428)//additives excel
+           // if(selectedValue==428)//additives excel
+                if(selectedValue=="5")//additives excel
             {
                 debugger;
                 var cnt = 0;
@@ -1610,7 +1956,8 @@
                     $("#progress").hide();
                 }
             }
-            if(selectedValue==12)//pm
+            //if(selectedValue==12)//pm
+            if(selectedValue=="6")//pm
             {
                 debugger;
                 var cnt = 0;
@@ -1721,10 +2068,11 @@
             debugger;
             var cid=@ViewBag.cid;
             $("#progress").show();
-            var selectedValue = $('#ItemGroup option:selected').val();
+            // var selectedValue = $('#ItemGroup option:selected').val();  txtReptype
+            var selectedValue = $('#txtReptype').val();
             var checkedCheckboxes = $("#output input[type=checkbox]:checked");
             var selectedincharge=$('#InchargeGroup option:selected').val();//$('#inchargediv').show();
-            var selectedwh=$('#Whdd').val();
+            //var selectedwh=$('#Whdd').val();
 
             if (checkedCheckboxes.length === 0) {
                 alert("Please select at least one row from the grid.");
@@ -1734,7 +2082,8 @@
                 //if(selectedinncharge==0){alert('Please select Prod Incharge');}
                 //else{
                 var collectedData = [];
-                if(selectedValue==5){//sfg post
+                //if(selectedValue==5){//sfg post
+                if(selectedValue==3){//sfg post
                     if(selectedincharge==0){
                         alert('Please select Production Incharge');
                         $("#progress").hide();
@@ -1747,12 +2096,12 @@
                                 var qtytobeproduced=parseFloat(row.find('td:eq(6) input').val());
                                 var topuptankcapacity=parseFloat(row.find("td:eq(10)").text());
                                 var rowno=i+1;
-                                if(qtytobeproduced>topuptankcapacity)
-                                {
-                                    alert('"Qty to be Produced" should not be greater than "TopUp TankCapacity" in row '+rowno);
-                                    $('#progress').hide();
-                                    e.preventDefault();
-                                }
+                                //if(qtytobeproduced>topuptankcapacity)
+                                //{
+                                //    alert('"Qty to be Produced" should not be greater than "TopUp TankCapacity" in row '+rowno);
+                                //    $('#progress').hide();
+                                //    e.preventDefault();
+                                //}
                                 var rowData = {
                                     Item: row.find("td:eq(0)").text(),
                                     Units: row.find("td:eq(1)").text(),
@@ -1814,7 +2163,8 @@
                         });
                     }
                 }
-                if(selectedValue==412)//FG post
+                //if(selectedValue==412)//FG post
+                if(selectedValue==2)//FG post
                 {
                     if(selectedincharge==0){
                         alert('Please select Production Incharge');
@@ -1879,7 +2229,8 @@
                         });
                     }
                 }
-                if(selectedValue==427){//baseoils
+                // if(selectedValue==427){//baseoils
+                if(selectedValue==4){//baseoils
                     debugger;
                     //if(selectedwh==0){
                     //    alert('Please select Warehouse');
@@ -1904,13 +2255,13 @@
                             //}
                             var qtytobeproduced=parseFloat(row.find('td:eq(6) input').val());
                             var topuptankcapacity=parseFloat(row.find("td:eq(10)").text());
-                           // var rowno=i+1;
-                            if(qtytobeproduced>topuptankcapacity)
-                            {
-                                alert('"Qty to be Produced" should not be greater than "RM TankCapacity" in row '+rowno);
-                                $('#progress').hide();
-                                e.preventDefault();
-                            }
+                            // var rowno=i+1;
+                            //if(qtytobeproduced>topuptankcapacity)
+                            //{
+                            //    alert('"Qty to be Produced" should not be greater than "RM TankCapacity" in row '+rowno);
+                            //    $('#progress').hide();
+                            //    e.preventDefault();
+                            //}
                             if(row.find('.ddid').val()!=0)
                             {
                                 var rowData = {
@@ -1985,8 +2336,8 @@
                         $("#progress").hide();
                     }
                 }
-                if(selectedValue==428){//additives
-
+               // if(selectedValue==428){//additives
+                if(selectedValue==5){//additives
                     //if(selectedwh==0){
                     //    alert('Please select Warehouse');
                     //    $("#progress").hide();
@@ -2072,7 +2423,8 @@
                         $("#progress").hide();
                     }
                 }
-                if(selectedValue==12){//PM
+                // if(selectedValue==12){//PM
+                if(selectedValue==6){//PM
                     debugger;
                     //if(selectedwh==0){
                     //    alert('Please select Warehouse');
