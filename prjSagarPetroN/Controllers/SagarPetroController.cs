@@ -119,7 +119,6 @@ namespace prjSagarPetroN.Controllers
                     Text = ds.Tables[0].Rows[i]["sName"].ToString()
                 });
             }
-
             return new SelectList(Whlist.AsEnumerable(), "Value", "Text");
         }
         //GetItemGroups
@@ -2027,7 +2026,6 @@ where Itemid={item}";
         {
             try
             {
-
                 Log("Get Production Planning Entered");
                 string Message = "";
                 int bodyid = 0;

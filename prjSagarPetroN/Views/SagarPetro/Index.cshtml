@@ -54,18 +54,18 @@
     }
 </style>
 <h4 style="color:#0073AA;font-weight:bold;margin-left:18px;">Reorder Level</h4>
-<div class="container">
-    <div class="col-md-5" style="border:2px solid gray;border-radius:5px;padding-bottom:10px">
+<div class="container" style="padding-top:0px">
+    <div class="col-md-5" style="border:2px solid gray;border-radius:5px;padding-bottom:10px;">
         <div class="row">
-            <br />
-            <div class="row" style="margin-left:5px">
+            @*<br />*@
+            <div class="row" style="margin-left:5px;padding-top:5px">
                 @Html.Label("Date", new { @class = "col-md-5 control-label", @style = "padding-top:9px;" })
                 <div class="col-md-3">
                     @Html.Editor("Date", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })
                 </div>
             </div>
-            <br />
-            <div class="row" style="margin-left:5px">
+            @*<br />*@
+            <div class="row" style="margin-left:5px;padding-top:5px">
                 @Html.Label("Parent Group", new { @class = "col-md-5 control-label", @style = "padding-top:9px;" })
                 <div class="col-md-3">
                     @*@Html.Editor("Item Group", new { htmlAttributes = new { required = "", @type = "Date", @Value = @DateTime.Now.ToString("yyyy-MM-dd"), @class = "form-control", @style = "width:183px;margin-left:-2px;", @id = "ToDate" } })*@
@@ -75,8 +75,8 @@
                     <input type="hidden" id="txtReptype" name="txtReptype" />
                 </div>
             </div>
-            <br />
-            <div class="row" style="margin-left:5px" id="inchargediv">
+            @*<br />*@
+            <div class="row" style="margin-left:5px;padding-top:5px" id="inchargediv">
 
                 @Html.Label("Production Incharge", new { @class = "col-md-5 control-label", @style = "padding-top:2px;" })
                 <div class="col-md-3">
@@ -85,8 +85,8 @@
                 </div>
 
             </div>
-            <br />
-            <div class="row" align="center">
+            @*<br />*@
+            <div class="row" align="center" style="padding-top:5px">
                 <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btnLoad" value="Load" />
                 <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btnClose" value="Close" onclick="Focus8WAPI.gotoHomePage();" />
             </div>
@@ -176,16 +176,16 @@
     </div>*@
 
 <div class="text-center" style="text-align: left;" id="maindiv">
-    <br />
-    <div align="right" id="btndiv">
+    @*<br />*@
+    <div align="right" id="btndiv" style="padding-top:5px">
         <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btnExcel" value="Excel" />
         <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btnPost" value="Post" />
         <input type="button" style="width:100px;background-color:#0073AA" class="btn btn-primary" id="btndivClose" value="Close" onclick="gotoClosePage();" />
 
     </div>
-    <br />
-    <div class="tableFixHead1" style="overflow: auto; height:270px;">
-        <table class="table table-bordered table-striped report-table-div1" id="header-fixed">
+    @*<br />*@
+    <div class="tableFixHead1" style="overflow: auto; height:325px;padding-top:5px">
+        <table class="table table-bordered table-striped report-table-div1" id="header-fixed" style="white-space:nowrap;">
             <thead class="sticky" id="tablehead">
                 @*<tr class="table-head" style="width:120px;background-color: #428bca;">
                         <th>Item</th>
@@ -270,6 +270,7 @@
         });
         $("#ddlItmGroup").change(function () {
             debugger;
+            $('#maindiv').hide();
             $("#progress").show();
             ProdSelectedIds='';
             ProdSelected='';
@@ -493,7 +494,7 @@
                         $("#progress").hide();
                     }
                     else{
-                       // var selectedValues = $('#MltItem').val();
+                        // var selectedValues = $('#MltItem').val();
                         var dt = $("#ToDate").val();
                         //var fromDateObj = new Date(frm);
                         //var frmparts = frm.split("-");
@@ -521,13 +522,13 @@
                                         <th>Item</th>
                                         <th>Units</th>
                                         <th>Description</th>
-                                        <th>Available Stock<br /> Qty</th>
-                                        <th>Safety Level<br />Qty</th>
+                                        <th>Available Stock Qty</th>
+                                        <th>Safety Level Qty</th>
                                         <th>Difference</th>
-                                        <th>Qty to be<br />produced</th>
-                                        <th>Production Planning<br /> Status</th>
-                                        <th>Post Production<br /> Planning</th>
-                                        <th>Production Planning<br />DocNo</th>
+                                        <th>Qty to be produced</th>
+                                        <th>Production Planning Status</th>
+                                        <th>Post Production Planning</th>
+                                        <th>Production Planning DocNo</th>
                                         <th>Due Date</th>
                                         </tr>`);
 
@@ -641,17 +642,17 @@
                                         <th>Item</th>
                                         <th>Units</th>
                                         <th>Description</th>
-                                        <th>Available Stock<br /> Qty</th>
-                                        <th>Safety Level<br />Qty</th>
+                                        <th>Available Stock Qty</th>
+                                        <th>Safety Level Qty</th>
                                         <th>Difference</th>
-                                        <th>Qty to be<br />produced</th>
+                                        <th>Qty to be produced</th>
                                         <th>Tank Master</th>
                                         <th>Tank Capacity</th>
                                         <th>Closing Stock</th>
-                                        <th>Top up <br />Tank Capacity</th>
-                                        <th>Production Planning<br /> Status</th>
-                                        <th>Post Production<br /> Planning</th>
-                                        <th>Production Planning<br />DocNo</th>
+                                        <th>Top up Tank Capacity</th>
+                                        <th>Production Planning Status</th>
+                                        <th>Post Production Planning</th>
+                                        <th>Production Planning DocNo</th>
                                         <th>Due Date</th>
                                         <th>Remarks</th>
                                         </tr>`);
@@ -659,7 +660,7 @@
                                             var val=0;
                                             for (var i = 0; i < response.itemshowmodellist.length; i++)
                                             {
-                                               var  val1=response.itemshowmodellist[i].TankCapacity;//200  150
+                                                var  val1=response.itemshowmodellist[i].TopUpTankCapacity;//200  150
                                                 var formattedDate = response.itemshowmodellist[i].DueDate;
                                                 if(formattedDate!="")
                                                 {
@@ -671,7 +672,7 @@
                                                 var currentItem = response.itemshowmodellist[i].Item;
                                                 var showEmptyValues = currentItem === previousItem;
                                                 if (showEmptyValues) {
-                                                    val=val+response.itemshowmodellist[i].QtytobeProduced;//200
+                                                    // val=val+response.itemshowmodellist[i].QtytobeProduced;//200
                                                     var trHTML = '<tr>';
                                                     trHTML += '<td></td>';
                                                     trHTML += '<td></td>';
@@ -680,16 +681,33 @@
                                                     trHTML += '<td></td>';
                                                     trHTML += '<td></td>';
                                                     //trHTML += '<td></td>';
-                                                   // '</td>';
+                                                    // '</td>';
                                                     if(val>val1)//response.itemshowmodellist[i].QtytobeProduced
                                                     {
-                                                        val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;//50
-                                                        trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1 + '">' +//100  response.itemshowmodellist[i].TankCapacity
-                                                            '</td>';
+                                                        if(val1<0)
+                                                        {
+                                                            var a=0;
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +a + '">' +//100  response.itemshowmodellist[i].TankCapacity
+                                                           '</td>';
+                                                        }
+                                                        else{
+                                                            val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;//50
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1 + '">' +//100  response.itemshowmodellist[i].TankCapacity
+                                                                '</td>';}
                                                     }
-                                                    else{                                                   
-                                                        trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val + '">' +// response.itemshowmodellist[i].QtytobeProduced
-                                                             '</td>';
+                                                    else{
+                                                        //  var v=0;
+                                                        if(val1<0)
+                                                        {
+                                                            var a=0;
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +a + '">' +//100  response.itemshowmodellist[i].TankCapacity
+                                                           '</td>';
+                                                            val=0;
+                                                        }
+                                                        else{
+                                                            trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val + '">' +// response.itemshowmodellist[i].QtytobeProduced
+                                                                 '</td>';
+                                                            val=0;}
                                                     }
                                                     //trHTML +='<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
                                                     trHTML +=  '<td>'  + response.itemshowmodellist[i].TankMaster +
@@ -737,7 +755,7 @@
                                                 else {
                                                     val=0;
                                                     var trHTML = '';
-                                                    val=val+response.itemshowmodellist[i].QtytobeProduced;//200
+                                                    val=response.itemshowmodellist[i].QtytobeProduced;//200
                                                     //val=val+response.itemshowmodellist[i].QtytobeProduced;
                                                     // Show actual values
                                                     var formattedDate = response.itemshowmodellist[i].DueDate;
@@ -758,15 +776,32 @@
                                                     //  if(response.itemshowmodellist[i].QtytobeProduced>val )//150>100=50
                                                     if(val>val1)
                                                     {
-                                                        val=val-val;//response.itemshowmodellist[i].QtytobeProduced;//50
-                                                        trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1  + '">' +//100 response.itemshowmodellist[i].TankCapacity
-                                                            '</td>';
+                                                        if(val1<0)
+                                                        {
+                                                            var a=0;
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +a  + '">' +//100 response.itemshowmodellist[i].TankCapacity
+                                                                '</td>';
+                                                        }
+                                                        else{
+                                                            val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;//50
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1  + '">' +//100 response.itemshowmodellist[i].TankCapacity
+                                                                '</td>';
+                                                        }
                                                     }
                                                     else{
-                                                   
-                                                        trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val  + '">' +//response.itemshowmodellist[i].QtytobeProduced
-                                                             '</td>';
+                                                        if(val1<0)
+                                                        {
+                                                            var a=0;
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +a  + '">' +//100 response.itemshowmodellist[i].TankCapacity
+                                                                '</td>';
+                                                            val=0;
                                                         }
+                                                        else
+                                                        {
+                                                            trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val  + '">' +//response.itemshowmodellist[i].QtytobeProduced
+                                                                 '</td>';
+                                                            val=0;}
+                                                    }
                                                     trHTML +='<td>' + response.itemshowmodellist[i].TankMaster +
                                             '</td><td>' + response.itemshowmodellist[i].TankCapacity +
                                             '</td><td>' + response.itemshowmodellist[i].ClosingStock +
@@ -810,7 +845,7 @@
                                                     $('#output').append(trHTML);
                                                 }
                                                 previousItem = response.itemshowmodellist[i].Item;
-                                               
+
                                             }
                                             @*for (var i = 0; i < response.itemshowmodellist.length; i++)
                                         {
@@ -908,29 +943,29 @@
                                         <th>Item</th>
                                         <th>Units</th>
                                         <th>Description</th>
-                                        <th>Available Stock<br /> Qty</th>
-                                        <th>Safety Level<br />Qty</th>
+                                        <th>Available Stock Qty</th>
+                                        <th>Safety Level Qty</th>
                                         <th>Difference</th>
-                                        <th>Qty to be<br />produced</th>
+                                        <th>Qty to be produced</th>
                                         <th>Tank Master</th>
                                         <th>Tank Capacity</th>
                                         <th>Closing Stock</th>
-                                        <th>Available RM<br />Tank Capacity</th>
-                                        <th>Purchase Indent<br /> Status</th>
-                                        <th>Post Purchase<br /> Indent</th>
-                                        <th>Purchase Indent<br />DocNo</th>
+                                        <th>Available RM Tank Capacity</th>
+                                        <th>Purchase Indent Status</th>
+                                        <th>Post Purchase Indent</th>
+                                        <th>Purchase Indent DocNo</th>
                                         <th>Due Date</th>
                                         <th>Warehouse</th>
                                         </tr>`);
                                             var previousItem = '';
                                             //var previousItem = '';
-                                           var val=0;
+                                            var val=0;
                                             var valq=0;
                                             for (var i = 0; i < response.itemshowmodellist.length; i++)
                                             {
-                                               // var val=0;
+                                                // var val=0;
                                                 //  val=response.itemshowmodellist[i].TankCapacity;
-                                                var  val1=response.itemshowmodellist[i].TankCapacity;//200  150
+                                                var  val1=response.itemshowmodellist[i].TopUpTankCapacity;//200  150
                                                 @*var formattedDate = response.itemshowmodellist[i].DueDate;
                                             if(formattedDate!="")
                                             {
@@ -955,15 +990,29 @@
                                                     // trHTML += '</td>';
                                                     if(val>val1)//250>100
                                                     {
-                                                        val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;150 250
-                                                        trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1 + '">' +//100   response.itemshowmodellist[i].TankCapacity
-                                                            '</td>';
+                                                        if(val1<0){
+                                                            var a=0;
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +a + '">' +//100   response.itemshowmodellist[i].TankCapacity
+                                                           '</td>';
+                                                        }
+                                                        else{
+                                                            val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;150 250
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val1 + '">' +//100   response.itemshowmodellist[i].TankCapacity
+                                                                '</td>';}
                                                     }
-                                                    else{                                                   
-                                                        trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val + '">' +// response.itemshowmodellist[i].QtytobeProduced
-                                                             '</td>';
+                                                    else{
+                                                        if(val1<0){
+                                                            var a=0;
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +a + '">' +//100   response.itemshowmodellist[i].TankCapacity
+                                                           '</td>';
+                                                            val=0;
+                                                        }
+                                                        else{
+                                                            trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' +val + '">' +// response.itemshowmodellist[i].QtytobeProduced
+                                                                 '</td>';
+                                                            val=0;}
                                                     }
-                                                  //  trHTML +='<td>'+ '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                                    //  trHTML +='<td>'+ '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
                                                     trHTML +=  '<td>'   + response.itemshowmodellist[i].TankMaster +
                                                         '</td><td>' + response.itemshowmodellist[i].TankCapacity +
                                         '</td><td>' + response.itemshowmodellist[i].ClosingStock +
@@ -1016,7 +1065,7 @@
                                                 else {
                                                     val=0;
                                                     var trHTML = '';
-                                                    val=val+response.itemshowmodellist[i].QtytobeProduced;//100
+                                                    val=response.itemshowmodellist[i].QtytobeProduced;//100
                                                     // Show actual values
                                                     @*var formattedDate = response.itemshowmodellist[i].DueDate;
                                                 if(formattedDate!="")
@@ -1033,25 +1082,42 @@
                                             '</td><td>' + response.itemshowmodellist[i].Difference +
                                             '</td>';
                                                     //val1=50;
-                                              if( val>val1 )//100>50
+                                                    if(val>val1)//100>50
                                                     {
-                                                  val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;//50
-                                                  trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + val1 + '">' +//100 response.itemshowmodellist[i].TankCapacity
-                                                            '</td>';
+                                                        if(val1<0)
+                                                        {
+                                                            var a=0;
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + a + '">' +//100 response.itemshowmodellist[i].TankCapacity
+                                                                 '</td>';
+                                                        }
+                                                        else{
+                                                            val=val-val1;//response.itemshowmodellist[i].QtytobeProduced;//50
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + val1 + '">' +//100 response.itemshowmodellist[i].TankCapacity
+                                                                      '</td>';}
                                                     }
-                                                else{
-                                                  //val=0;
-                                                  trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + val + '">' +//response.itemshowmodellist[i].QtytobeProduced
-                                                             '</td>';
-                                                }
-                                         //   '</td><td>' + response.itemshowmodellist[i].Difference +
-                                           //   trHTML +=   '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
-                                              trHTML +=  '<td>' + response.itemshowmodellist[i].TankMaster +
-                                            '</td><td>' + response.itemshowmodellist[i].TankCapacity +
-                                            '</td><td>' + response.itemshowmodellist[i].ClosingStock +
-                                            '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
-                                            '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
-                                             '</td><td>';
+                                                    else{
+                                                        //val=0;
+                                                        if(val1<0)
+                                                        {
+                                                            var a=0;
+                                                            trHTML +='<td>'+'<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + a + '">' +//100 response.itemshowmodellist[i].TankCapacity
+                                                                 '</td>';
+                                                            val=0;
+                                                        }
+                                                        else
+                                                        {
+                                                            trHTML +=  '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + val + '">' +//response.itemshowmodellist[i].QtytobeProduced
+                                                                       '</td>';
+                                                            val=0;}
+                                                    }
+                                                    //   '</td><td>' + response.itemshowmodellist[i].Difference +
+                                                    //   trHTML +=   '<td>' + '<input style="width:100px;" type="number" min="1" max="'+ response.itemshowmodellist[i].TopUpTankCapacity + '" class="form-control clsrate" id="txtRate" name="Rate" value="' + response.itemshowmodellist[i].QtytobeProduced + '">' +
+                                                    trHTML +=  '<td>' + response.itemshowmodellist[i].TankMaster +
+                                                  '</td><td>' + response.itemshowmodellist[i].TankCapacity +
+                                                  '</td><td>' + response.itemshowmodellist[i].ClosingStock +
+                                                  '</td><td>' + response.itemshowmodellist[i].TopUpTankCapacity +
+                                                  '</td><td >' + response.itemshowmodellist[i].ProductionPlanningStatus +//StartDate
+                                                   '</td><td>';
 
                                                     if (response.itemshowmodellist[i].ProductionPlanningDocNo !== "") {
                                                         // If ProductionPlanningDocNo is not empty, check the checkbox by default and make it read-only
@@ -1198,13 +1264,13 @@
                                         <th>Warehouse</th>//
                                         <th>Units</th>
                                         <th>Description</th>
-                                        <th>Available Stock<br /> Qty</th>
-                                        <th>Safety Level<br />Qty</th>
+                                        <th>Available Stock Qty</th>
+                                        <th>Safety Level Qty</th>
                                         <th>Difference</th>
-                                        <th>Qty to be<br />produced</th>
-                                        <th>Purchase Indent<br /> Status</th>
-                                        <th>Post Purchase<br /> Indent</th>
-                                        <th>Purchase Indent<br />DocNo</th>
+                                        <th>Qty to be produced</th>
+                                        <th>Purchase Indent Status</th>
+                                        <th>Post Purchase Indent</th>
+                                        <th>Purchase Indent DocNo</th>
                                         <th>Due Date</th>
                                         </tr>`);
                                             var previousItem = '';
@@ -1421,13 +1487,13 @@
                                         <th>Warehouse</th>//
                                         <th>Units</th>
                                         <th>Description</th>
-                                        <th>Available Stock<br /> Qty</th>
-                                        <th>Safety Level<br />Qty</th>
+                                        <th>Available Stock Qty</th>
+                                        <th>Safety Level Qty</th>
                                         <th>Difference</th>
-                                        <th>Qty to be<br />produced</th>
-                                        <th>Purchase Indent<br /> Status</th>
-                                        <th>Post Purchase<br /> Indent</th>
-                                        <th>Purchase Indent<br />DocNo</th>
+                                        <th>Qty to be produced</th>
+                                        <th>Purchase Indent Status</th>
+                                        <th>Post Purchase Indent</th>
+                                        <th>Purchase Indent DocNo</th>
                                         <th>Due Date</th>
                                         </tr>`);
                                             var previousItem = '';
@@ -1771,7 +1837,7 @@
                     }
                 });
             }
-           // if(selectedValue==427){//baseoils excel
+            // if(selectedValue==427){//baseoils excel
             if(selectedValue=="4"){//baseoils excel
                 //if(selectedwh==0){
                 //    alert('Please select Warehouse');
@@ -1866,8 +1932,8 @@
                 }
                 //}
             }
-           // if(selectedValue==428)//additives excel
-                if(selectedValue=="5")//additives excel
+            // if(selectedValue==428)//additives excel
+            if(selectedValue=="5")//additives excel
             {
                 debugger;
                 var cnt = 0;
@@ -2336,7 +2402,7 @@
                         $("#progress").hide();
                     }
                 }
-               // if(selectedValue==428){//additives
+                // if(selectedValue==428){//additives
                 if(selectedValue==5){//additives
                     //if(selectedwh==0){
                     //    alert('Please select Warehouse');
